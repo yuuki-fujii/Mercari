@@ -113,7 +113,7 @@
         </thead>
         <tbody>
           <tr th:each="item : ${itemList}">
-            <td class="item-name"><a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
+            <td class="item-name"><a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${nowPageNumber}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
             <td class="item-price" th:text="${item.price}">52.0</td>
             <td class="item-category" th:text="${item.category}"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
             <td class="item-brand" th:text="${item.brand}"><a href="">Razer</a></td>

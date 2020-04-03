@@ -17,10 +17,13 @@ public class ShowItemDetailController {
 			
 			
 	@RequestMapping("")
-	public String showItemDetail(Model model,Integer id) {
+	public String showItemDetail(Model model,Integer id,Integer pageNumber) {
+		System.out.println(id);
+		System.out.println(pageNumber);
+		
 		Item item = showItemDetailService.getItem(id);
 		model.addAttribute("item", item);
-		
+		model.addAttribute("pageNumber", pageNumber);
 		return "detail";
 	}
 }
