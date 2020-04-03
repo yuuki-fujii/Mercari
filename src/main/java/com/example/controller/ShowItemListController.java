@@ -36,7 +36,7 @@ public class ShowItemListController {
 	private static final Integer COUNT_OF_PAGE_PER_PAGE = 30;
 	
 	@RequestMapping("")
-	public String ShowItemList(@Validated SearchForm form, BindingResult result, Model model, Integer pageNumber) {
+	public String showItemList(@Validated SearchForm form, BindingResult result, Model model, Integer pageNumber) {
 		
 		// 総ページ数を取得
 		Integer countOfPage = calcCountOfPage();

@@ -92,4 +92,21 @@ public class ItemRepository {
 		return count;
 	}
 	
+	
+	/**
+	 * 主キー検索を行う.
+	 * 
+	 * @param id 主キー
+	 * @return　1件の商品情報
+	 */
+	public Item findById(Integer id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name,i.brand,i.price,i.shipping,i.description ");
+		sql.append("FROM " + TABLE_NAME + " i LEFT OUTER JOIN category c ON i.category = c.id ");
+		sql.append("WHERE i.id=:id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		Item item = template.queryForObject(sql.toString(), param, ITEM_ROW_MAPPER);
+		return item;
+	}
+	
 }
