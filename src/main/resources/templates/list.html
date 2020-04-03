@@ -87,13 +87,14 @@
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       </form>
     </div>
-
+	
     <!-- pagination -->
     <div class="pages">
       <nav class="page-nav">
+      	現在：<span th:text="${nowPageNumber}"></span>ページ目<br>
         <ul class="pager">
-          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }">&larr; prev</a></li>
-          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }">next &rarr;</a></li>
+          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }" ><span class="notTwiceBtn">&larr; prev</span></a></li>
+          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }"><span class="notTwiceBtn">next &rarr;</span></a></li>
         </ul>
       </nav>
     </div>
@@ -126,17 +127,21 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }">&larr; prev</a></li>
-          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }">next &rarr;</a></li>
+          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }"><span class="notTwiceBtn">&larr; prev</span></a></li>
+          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }"><span class="notTwiceBtn">next &rarr;</span></a></li>
         </ul>
       </nav>
       <!-- ページ番号を指定して表示するフォーム -->
+      現在：<span th:text="${nowPageNumber}"></span>ページ目<br>
+      
       <div id="select-page">
-        <form class="form-inline">
+        <form class="form-inline" method="post" th:action="@{/}" th:object="${searchForm}">
+        	<span th:errors="*{pageNumberString}" style="color:red"></span><br>
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
-              <input type="text" class="form-control"/>
+              <input type="hidden" name="nowPageNumberInt" th:value="${nowPageNumber}">
+              <input type="text" class="form-control" name="pageNumberString"/>
               <!-- 総ページ数 -->
               <div class="input-group-addon" th:text="${countOfPage}">/ 20</div>
             </div>

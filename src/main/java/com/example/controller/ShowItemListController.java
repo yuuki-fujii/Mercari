@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Item;
+import com.example.form.SearchForm;
 import com.example.service.ShowItemListService;
 
 /**
@@ -17,31 +21,50 @@ import com.example.service.ShowItemListService;
  *
  */
 @Controller
-@RequestMapping("")
+@RequestMapping("/")
 public class ShowItemListController {
 	
 	@Autowired
 	private ShowItemListService showItemListService;
 	
+	@ModelAttribute
+	public SearchForm setUpPageSearchForm() {
+		return new SearchForm();
+	}
 	
 	// 1ページあたりの最大データ数を定数化
 	private static final Integer COUNT_OF_PAGE_PER_PAGE = 30;
 	
-	@RequestMapping("/")
-	public String ShowItemList(Model model,Integer pageNumber) {
+	@RequestMapping("")
+	public String ShowItemList(@Validated SearchForm form, BindingResult result, Model model, Integer pageNumber) {
+		
 		// 総ページ数を取得
 		Integer countOfPage = calcCountOfPage();
+		Integer nowPageNumber = pageNumber;
 		
-		if (pageNumber == null) {
-			pageNumber = 1; 
+		
+		// ページ数がない時は1ページ目をセット
+		if (nowPageNumber == null) {
+			nowPageNumber = 1; 
+		}
+		
+		// フォームの入力段階で不正な値がある場合、元の画面に返す
+//		if (result.hasErrors()) {
+//			nowPageNumber = form.getNowPageNumberInt();
+//			return ShowItemList(form, result, model, nowPageNumber);
+//		}
+		
+		// ページ数を直接検索された際は、更新する
+		if (form.getPageNumberString() != null) {
+			nowPageNumber = form.getIntPageNumber();
 		}
 		
 		// データの開始番号を求める
-		Integer startNumber = calcStartNumber(pageNumber);
-		
+		Integer startNumber = calcStartNumber(nowPageNumber);
 		List <Item> itemList = showItemListService.getItemsOfOnePage(startNumber);
 		
-		model.addAttribute("nowPageNumber", pageNumber);
+		
+		model.addAttribute("nowPageNumber", nowPageNumber);
 		model.addAttribute("countOfPage", countOfPage);
 		model.addAttribute("itemList", itemList);
 		return "list";
