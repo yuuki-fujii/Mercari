@@ -77,7 +77,7 @@
           </tr>
         </tbody>
       </table>
-      <a type="button" class="btn btn-default" href="./edit.html"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>
+      <a type="button" class="btn btn-default" href="./edit.html" th:href="@{'/edit_item?id=' + ${item.id} +'&pageNumber=' + ${pageNumber}}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>
     </div>
   </div>
 </body>

@@ -39,10 +39,12 @@
       </div>
     </div>
   </nav>
-
+	
+	
+	
   <!-- details -->
   <div id="input-main" class="container">
-    <a type="button" class="btn btn-default" href="./detail.html"><i class="fa fa-reply"></i> back</a>
+    <a type="button" class="btn btn-default" href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${pageNumber}}"><i class="fa fa-reply"></i> back</a>
     <h2>Edit</h2>
 
     <!-- edit form -->

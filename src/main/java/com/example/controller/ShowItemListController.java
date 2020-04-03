@@ -10,8 +10,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchForm;
+import com.example.service.ShowCategoryService;
 import com.example.service.ShowItemListService;
 
 /**
@@ -26,6 +28,9 @@ public class ShowItemListController {
 	
 	@Autowired
 	private ShowItemListService showItemListService;
+	
+	@Autowired
+	private ShowCategoryService showCategoryService;
 	
 	@ModelAttribute
 	public SearchForm setUpPageSearchForm() {
@@ -63,6 +68,15 @@ public class ShowItemListController {
 		Integer startNumber = calcStartNumber(nowPageNumber);
 		List <Item> itemList = showItemListService.getItemsOfOnePage(startNumber);
 		
+		// カテゴリをセット
+		List <Category> bigCategoryList = showCategoryService.getBigCategory();
+		List <Category> middleCategoryList = showCategoryService.getMiddleCategory();
+		List <Category> smallCategoryList = showCategoryService.getSmallCategory();
+		
+		
+		model.addAttribute("bigCategoryList", bigCategoryList);
+		model.addAttribute("middleCategoryList", middleCategoryList);
+		model.addAttribute("smallCategoryList", smallCategoryList);
 		
 		model.addAttribute("nowPageNumber", nowPageNumber);
 		model.addAttribute("countOfPage", countOfPage);

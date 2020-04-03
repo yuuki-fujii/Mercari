@@ -26,7 +26,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="./list.html">Rakus Items</a>
+      <a class="navbar-brand" href="./list.html" th:href="@{/}">Rakus Items</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <div>
@@ -55,28 +55,34 @@
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
           <select class="form-control">
-            <option>- parentCategory -</option>
-            <option>parentCategory1</option>
-            <option>parentCategory2</option>
+          	<option>- parentCategory -</option>
+          	<span th:each="bigCategory :${bigCategoryList}">
+            <option th:text="${bigCategory.categoryName}" name="bigCategory" th:value="${bigCategory.id}">parentCategory1</option>
+            </span>
+<!--             <option>parentCategory2</option>
             <option>parentCategory3</option>
             <option>parentCategory4</option>
-            <option>parentCategory5</option>
+            <option>parentCategory5</option> -->
           </select>
           <select class="form-control">
             <option>- childCategory -</option>
-            <option>childCategory1</option>
-            <option>childCategory2</option>
+            <span th:each="middleCategory :${middleCategoryList}">
+            <option th:text="${middleCategory.categoryName}" name="middleCategory" th:value="${middleCategory.id}">childCategory1</option>
+            </span>
+<!--             <option>childCategory2</option>
             <option>childCategory3</option>
             <option>childCategory4</option>
-            <option>childCategory5</option>
+            <option>childCategory5</option> -->
           </select>
           <select class="form-control">
             <option>- grandChild -</option>
-            <option>grandChild1</option>
-            <option>grandChild2</option>
+            <span th:each="smallCategory :${smallCategoryList}">
+            <option th:text="${smallCategory.categoryName}" name="smallCategory" th:value="${smallCategory.id}">childCategory1</option>
+            </span>
+<!--             <option>grandChild2</option>
             <option>grandChild3</option>
             <option>grandChild4</option>
-            <option>grandChild5</option>
+            <option>grandChild5</option> -->
           </select>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
