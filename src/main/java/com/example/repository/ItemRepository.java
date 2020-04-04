@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -34,6 +35,7 @@ public class ItemRepository {
 		item.setName(rs.getString("name"));
 		item.setCondition(rs.getInt("condition"));
 		item.setCategory(rs.getString("category_name"));
+		item.setCategoryId(rs.getInt("category_id"));
 		item.setBrand(rs.getString("brand"));
 		item.setPrice(rs.getDouble("price"));
 		item.setShipping(rs.getInt("shipping"));
@@ -68,7 +70,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findItemsOfOnePage(Integer startNumber){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name,");
+		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name, c.id AS category_id,");
 		sql.append("i.brand,i.price,i.shipping,i.description ");
 		sql.append("FROM " + TABLE_NAME + " i LEFT OUTER JOIN category c ON i.category = c.id ");
 		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET " + startNumber);
@@ -101,12 +103,30 @@ public class ItemRepository {
 	 */
 	public Item findById(Integer id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name,i.brand,i.price,i.shipping,i.description ");
+		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name,c.id AS category_id,i.brand,i.price,i.shipping,i.description ");
 		sql.append("FROM " + TABLE_NAME + " i LEFT OUTER JOIN category c ON i.category = c.id ");
 		sql.append("WHERE i.id=:id");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		Item item = template.queryForObject(sql.toString(), param, ITEM_ROW_MAPPER);
 		return item;
+	}
+	
+	
+	/**
+	 * 商品情報を更新する.
+	 * 
+	 * @param item 商品情報
+	 */
+	public void updateItem(Item item) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE " + TABLE_NAME + " SET name=:name , condition=:condition, category=:categoryId,");
+		sql.append("brand=:brand, price=:price, shipping=:shipping, description=:description ");
+		sql.append("WHERE id=:id");
+		
+		template.update(sql.toString(), param);
+		
 	}
 	
 }
