@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
-import com.example.form.SearchForm;
+import com.example.form.SearchPageForm;
 import com.example.service.ShowCategoryService;
 import com.example.service.ShowItemListService;
 
@@ -33,35 +33,25 @@ public class ShowItemListController {
 	private ShowCategoryService showCategoryService;
 	
 	@ModelAttribute
-	public SearchForm setUpPageSearchForm() {
-		return new SearchForm();
+	public SearchPageForm setUpPageSearchForm() {
+		return new SearchPageForm();
 	}
 	
 	// 1ページあたりの最大データ数を定数化
 	private static final Integer COUNT_OF_PAGE_PER_PAGE = 30;
 	
 	@RequestMapping("")
-	public String showItemList(@Validated SearchForm form, BindingResult result, Model model, Integer pageNumber) {
+	public String showItemList(Model model, Integer pageNumber) {
 		
 		// 総ページ数を取得
 		Integer countOfPage = calcCountOfPage();
+		// 現在のページ数を設定
 		Integer nowPageNumber = pageNumber;
 		
 		
 		// ページ数がない時は1ページ目をセット
 		if (nowPageNumber == null) {
 			nowPageNumber = 1; 
-		}
-		
-		// フォームの入力段階で不正な値がある場合、元の画面に返す
-//		if (result.hasErrors()) {
-//			nowPageNumber = form.getNowPageNumberInt();
-//			return ShowItemList(form, result, model, nowPageNumber);
-//		}
-		
-		// ページ数を直接検索された際は、更新する
-		if (form.getPageNumberString() != null) {
-			nowPageNumber = form.getIntPageNumber();
 		}
 		
 		// データの開始番号を求める
@@ -83,6 +73,37 @@ public class ShowItemListController {
 		model.addAttribute("itemList", itemList);
 		return "list";
 	}
+	
+	
+	/**
+	 * @param form ページ検索フォーム
+	 * @param result BindingResult
+	 * @param model　リクエストスコープ
+	 * @return ユーザが検索したページ数を返す
+	 */
+	@RequestMapping("/search_page")
+	public String searchPage(@Validated SearchPageForm form,BindingResult result,Model model) {
+		
+		try {
+			if (form.getPageNumberForSearch() <= 0 || form.getPageNumberForSearch() > calcCountOfPage()) {
+				result.rejectValue("pageNumberForSearch",  null, "1から" + calcCountOfPage() + "の数値を入力してください");
+			}
+		} catch (NullPointerException e) {
+			
+		}
+		
+		
+		// もし入力値に誤りがあれば、元の画面に戻る&エラーメッセージを返す
+		if (result.hasErrors()) {
+			System.out.println("何かしらのエラー");
+			return showItemList(model, form.getNowPageNumberInt());
+		}
+
+		return showItemList(model, form.getPageNumberForSearch());
+	}
+	
+	
+	
 	
 	
 	/**

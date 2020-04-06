@@ -15,13 +15,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
+		
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// セキュリティ設定を無視するリクエスト設定
 		// 静的リソースに対するアクセスはセキュリティ設定を無視する
 		web.ignoring()
-			.antMatchers("/css/**","/js/**");
+			.antMatchers( "/css/**"
+						, "/img/**"
+						, "/js/**"
+						, "/fonts/**");
 	}
 	
 	

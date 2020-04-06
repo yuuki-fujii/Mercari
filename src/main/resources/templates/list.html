@@ -141,13 +141,12 @@
       現在：<span th:text="${nowPageNumber}"></span>ページ目<br>
       
       <div id="select-page">
-        <form class="form-inline" method="post" th:action="@{/}" th:object="${searchForm}">
-        	<span th:errors="*{pageNumberString}" style="color:red"></span><br>
+        <form class="form-inline" method="post" th:action="@{/search_page}" th:object="${searchForm}"> 
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
-              <input type="hidden" name="nowPageNumberInt" th:value="${nowPageNumber}">
-              <input type="text" class="form-control" name="pageNumberString"/>
+              <input type="hidden" name="nowPageNumberInt" th:value="${nowPageNumber}" >
+              <input type="number" class="form-control" name="pageNumberForSearch"/>
               <!-- 総ページ数 -->
               <div class="input-group-addon" th:text="${countOfPage}">/ 20</div>
             </div>
@@ -155,6 +154,7 @@
               <button type="submit" class="btn btn-default">Go</button>
             </div>
           </div>
+          <span th:errors="*{pageNumberForSearch}" style="color:red"></span><br>
         </form>
       </div>
     </div>
