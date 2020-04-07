@@ -49,5 +49,14 @@ public class ShowCategoryService {
 		return categoryRepository.findAllSmallCategory();
 	}
 	
+	/**
+	 * 大カテゴリidから中カテゴリを検索する.
+	 * 
+	 * @param bigCategoryId 大カテゴリのid
+	 * @return 大カテゴリの子の関係にあたる全ての中カテゴリ
+	 */
+	public List <Category> getMiddleCategoryById(Integer bigCategoryId){
+		return categoryRepository.findMiddleCategoryByBigCategoryId(bigCategoryId);
+	}
 	
 }

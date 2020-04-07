@@ -5,14 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
-import com.example.form.SearchPageForm;
 import com.example.service.ShowCategoryService;
 import com.example.service.ShowItemListService;
 
@@ -32,10 +28,6 @@ public class ShowItemListController {
 	@Autowired
 	private ShowCategoryService showCategoryService;
 	
-	@ModelAttribute
-	public SearchPageForm setUpPageSearchForm() {
-		return new SearchPageForm();
-	}
 	
 	// 1ページあたりの最大データ数を定数化
 	private static final Integer COUNT_OF_PAGE_PER_PAGE = 30;
@@ -60,13 +52,11 @@ public class ShowItemListController {
 		
 		// カテゴリをセット
 		List <Category> bigCategoryList = showCategoryService.getBigCategory();
-		List <Category> middleCategoryList = showCategoryService.getMiddleCategory();
-		List <Category> smallCategoryList = showCategoryService.getSmallCategory();
+
 		
 		
 		model.addAttribute("bigCategoryList", bigCategoryList);
-		model.addAttribute("middleCategoryList", middleCategoryList);
-		model.addAttribute("smallCategoryList", smallCategoryList);
+		
 		
 		model.addAttribute("nowPageNumber", nowPageNumber);
 		model.addAttribute("countOfPage", countOfPage);
@@ -82,24 +72,24 @@ public class ShowItemListController {
 	 * @return ユーザが検索したページ数を返す
 	 */
 	@RequestMapping("/search_page")
-	public String searchPage(@Validated SearchPageForm form,BindingResult result,Model model) {
+	public String searchPage(Model model,Integer nowPageNumberInt, Integer pageNumberForSearch) {
 		
-		try {
-			if (form.getPageNumberForSearch() <= 0 || form.getPageNumberForSearch() > calcCountOfPage()) {
-				result.rejectValue("pageNumberForSearch",  null, "1から" + calcCountOfPage() + "の数値を入力してください");
-			}
-		} catch (NullPointerException e) {
-			
+		// nullでGoボタンが押された場合1ページ目に遷移させる
+		if (pageNumberForSearch == null) {
+			return showItemList(model, 1);
+		} 
+		
+		// 総ページ数を取得
+		Integer countOfPage = calcCountOfPage();
+		
+		// 入力された値が0以下または最大値より大きいとき、メッセージ付きで元のページに戻す
+		if (pageNumberForSearch <= 0 || pageNumberForSearch > countOfPage) {
+			model.addAttribute("errorMessage", "1〜" + countOfPage + "の数字を入力してください");
+			return showItemList(model, nowPageNumberInt);
 		}
-		
-		
-		// もし入力値に誤りがあれば、元の画面に戻る&エラーメッセージを返す
-		if (result.hasErrors()) {
-			System.out.println("何かしらのエラー");
-			return showItemList(model, form.getNowPageNumberInt());
-		}
-
-		return showItemList(model, form.getPageNumberForSearch());
+	
+		// 問題なければ指定したページに遷移させる
+		return showItemList(model, pageNumberForSearch);
 	}
 	
 	

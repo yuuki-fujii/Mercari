@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Category;
@@ -78,5 +80,22 @@ public class CategoryRepository {
 		
 		List <Category> smallCategoryList = template.query(sql.toString(), CATEGORY_ROW_MAPPER);
 		return smallCategoryList;
+	}
+	
+	
+	
+	/**
+	 * 大カテゴリidから中カテゴリを検索する.
+	 * 
+	 * @param bigCategoryId 大カテゴリのid
+	 * @return 大カテゴリの子の関係にあたる全ての中カテゴリ
+	 */
+	public List <Category> findMiddleCategoryByBigCategoryId(Integer bigCategoryId){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,parent_id,category_name,name_all ");
+		sql.append("FROM" + TABLE_NAME +" WHERE parent_id = :id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id",bigCategoryId);
+		List <Category> middleCategoryList = template.query(sql.toString(), param,CATEGORY_ROW_MAPPER) ;
+		return middleCategoryList;
 	}
 }
