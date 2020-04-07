@@ -55,8 +55,8 @@ public class ShowCategoryService {
 	 * @param bigCategoryId 大カテゴリのid
 	 * @return 大カテゴリの子の関係にあたる全ての中カテゴリ
 	 */
-	public List <Category> getMiddleCategoryById(Integer bigCategoryId){
-		return categoryRepository.findMiddleCategoryByBigCategoryId(bigCategoryId);
+	public List <Category> getChildCategoryById(Integer parentId){
+		return categoryRepository.findChildCategoryByParentId(parentId);
 	}
 	
 }

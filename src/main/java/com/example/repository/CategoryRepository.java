@@ -82,19 +82,19 @@ public class CategoryRepository {
 		return smallCategoryList;
 	}
 	
-	
-	
+
+
 	/**
-	 * 大カテゴリidから中カテゴリを検索する.
+	 * 親カテゴリidから子カテゴリを検索する.
 	 * 
-	 * @param bigCategoryId 大カテゴリのid
-	 * @return 大カテゴリの子の関係にあたる全ての中カテゴリ
+	 * @param parentId 親カテゴリid
+	 * @return 該当する全ての小カテゴリ
 	 */
-	public List <Category> findMiddleCategoryByBigCategoryId(Integer bigCategoryId){
+	public List <Category> findChildCategoryByParentId(Integer parentId){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,parent_id,category_name,name_all ");
 		sql.append("FROM " + TABLE_NAME +" WHERE parent_id = :id");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("id",bigCategoryId);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id",parentId);
 		List <Category> middleCategoryList = template.query(sql.toString(), param,CATEGORY_ROW_MAPPER) ;
 		return middleCategoryList;
 	}

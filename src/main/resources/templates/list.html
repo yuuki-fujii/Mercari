@@ -62,13 +62,13 @@
 
           </select>
           <select class="form-control" name="middleCategory" id="middleCategory" style="width: 200px">
-            <option>- 中カテゴリ -</option>
-            <option>大カテゴリを選択してください</option>
+            <option value="0">- 中カテゴリ -</option>
+            <option value="-1">大カテゴリを選択してください</option>
            
           </select>
-          <select class="form-control" style="width: 200px">
+          <select class="form-control" name="childCategory" id="childCategory" style="width: 200px">
             <option>- 小カテゴリ -</option>
-            <option>中カテゴリを選択してください</option>
+            <option value="-1">中カテゴリを選択してください</option>
          
           </select>
         </div>
@@ -150,6 +150,7 @@
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <!-- jsファイルの読み込み -->
-  <script src="../static/js/category.js" th:src="@{/js/category.js}"></script>
+  <script src="../static/js/get_middle_category.js" th:src="@{/js/get_middle_category.js}"></script>
+  <script src="../static/js/get_small_category.js" th:src="@{/js/get_small_category.js}"></script>
 </body>
 </html>

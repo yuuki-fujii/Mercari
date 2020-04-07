@@ -104,21 +104,21 @@ public class ShowItemListController {
 	 * @return 該当する中カテゴリリスト
 	 */
 	@ResponseBody
-	@RequestMapping("/get_middle_category")
-	public Map <String, List<Category>> getMiddleCategory(Integer bigCategoryId){
+	@RequestMapping("/get_child_category")
+	public Map <String, List<Category>> getMiddleCategory(Integer parentId){
 		
 		Map <String, List<Category>> map = new HashMap<>();
 		// 先に宣言しておく
-		List <Category> middleCategoryList = null;
+		List <Category> childCategoryList = null;
 		
 		// 大カテゴリ（value = 0）に戻ったら中カテゴリもリセットされる
-		if ("0".equals(bigCategoryId.toString())) {
-			middleCategoryList = null;
+		if ("0".equals(parentId.toString()) || "-1".equals(parentId.toString()) ) {
+			childCategoryList = null;
 		} else {
-			middleCategoryList = showCategoryService.getMiddleCategoryById(bigCategoryId);
+			childCategoryList = showCategoryService.getChildCategoryById(parentId);
 		}
 		
-		map.put("middleCategoryList",middleCategoryList);
+		map.put("childCategoryList",childCategoryList);
 		return map;
 	}
 	
