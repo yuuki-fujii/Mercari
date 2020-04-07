@@ -1,11 +1,14 @@
 package com.example.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
@@ -90,6 +93,33 @@ public class ShowItemListController {
 	
 		// 問題なければ指定したページに遷移させる
 		return showItemList(model, pageNumberForSearch);
+	}
+	
+	
+	
+	/**
+	 * 大カテゴリidから中カテゴリを検索する.
+	 * 
+	 * @param bigCategoryId 大カテゴリid
+	 * @return 該当する中カテゴリリスト
+	 */
+	@ResponseBody
+	@RequestMapping("/get_middle_category")
+	public Map <String, List<Category>> getMiddleCategory(Integer bigCategoryId){
+		
+		Map <String, List<Category>> map = new HashMap<>();
+		// 先に宣言しておく
+		List <Category> middleCategoryList = null;
+		
+		// 大カテゴリ（value = 0）に戻ったら中カテゴリもリセットされる
+		if ("0".equals(bigCategoryId.toString())) {
+			middleCategoryList = null;
+		} else {
+			middleCategoryList = showCategoryService.getMiddleCategoryById(bigCategoryId);
+		}
+		
+		map.put("middleCategoryList",middleCategoryList);
+		return map;
 	}
 	
 	
