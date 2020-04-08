@@ -54,23 +54,28 @@ public class SearchItemListController {
 	 */
 	@RequestMapping("/search")
 	public String search(Model model, SearchForm form) {
-		
-		// 総ページ数を取得
-		Integer maxPage = calcMaxPage();
-		
+
 		if (form.getPageNumber() == null) {
 			form.setPageNumber(1);
-		} else if (form.getPageNumber() <= 0 || form.getPageNumber() > maxPage) {
+		} 
+		
+		// データ数を検索
+		Integer countOfData = showItemListService.countData(form);
+		// 総ページ数を取得
+		Integer maxPage = calcMaxPage(countOfData);
+		
+		if (form.getPageNumber() <= 0 || form.getPageNumber() > maxPage) {
 			// 入力された値が0以下または最大値より大きいとき、メッセージをつけて1ページに遷移する
 			model.addAttribute("errorMessage", "1〜" + maxPage + "の数字を入力してください");
 			form.setPageNumber(1);
 		}
-	
-		List <Item> itemList = showItemListService.searchItem(form);
 		
+		List <Item> itemList = showItemListService.searchItem(form);
 		if (itemList.size() == 0) {
 			model.addAttribute("noItemMessage", "該当する商品がありません");
 		}
+		
+		
 		
 		model.addAttribute("nowPageNumber", form.getPageNumber());
 		model.addAttribute("maxPage", maxPage);
@@ -102,9 +107,7 @@ public class SearchItemListController {
 	 * 
 	 * @return 総ページ数
 	 */
-	private Integer calcMaxPage() {
-		// 総データ数を求める
-		Integer countOfData = showItemListService.countData();
+	private Integer calcMaxPage(Integer countOfData) {
 		// 総ページ数を求める
 		Integer maxPage = 0;
 		// 30で割り切れる場合 （例）60 / 30 = 2ページ

@@ -24,8 +24,8 @@ public class SearchItemListService {
 	}
 	
 	
-	public Integer countData() {
-		return itemRepository.countData();
+	public Integer countData(SearchForm form) {
+		return itemRepository.countData(form);
 	}
 	
 	

@@ -45,10 +45,29 @@ public class ItemRepository {
 	};
 	
 	
+	/**
+	 * 商品を検索する.
+	 * 
+	 * @param form 商品検索フォーム
+	 * @return 該当する商品情報
+	 */
 	public List <Item> findBySerachForm(SearchForm form){
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		StringBuilder sql = createSql(form, params, null);
 		return template.query(sql.toString(), params,ITEM_ROW_MAPPER);	
+	}
+	
+	
+	/**
+	 * 検索にヒットした件数を取得する.
+	 * 
+	 * @param form 商品検索フォーム 
+	 * @return 該当した商品の数
+	 */
+	public Integer countData(SearchForm form) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+        StringBuilder sql = createSql(form, params, "count");
+        return template.queryForObject(sql.toString(), params, Integer.class);
 	}
 	
 	
@@ -57,9 +76,13 @@ public class ItemRepository {
 		
 		StringBuilder sql = new StringBuilder();
 		
-		// 共通部分
-		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
-		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description ");
+		if ("count".equals(mode)) {
+			sql.append("SELECT count(*) ");
+		} else {
+			sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
+			sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description ");
+		}
+		
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
     	sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("WHERE 1 = 1 "); // 下記if文でwhere句を追加しやすいように常に真の条件を入れておく
@@ -81,23 +104,14 @@ public class ItemRepository {
 			params.addValue("brandName", form.getBrandName());
 		}
 		
-
-		
-		
-		Integer startNumber = calcStartNumber(form);
-		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET "+ startNumber);
-		
+		if (!"count".equals(mode)) {
+			Integer startNumber = calcStartNumber(form);
+			sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET "+ startNumber);
+		}
+	
 		return sql;
 	}
 	
-	
-	
-
-
-
-
-	
-
 	/**
 	 * 現在のページでの開始番号 - 1 を求める.
 	 * 
@@ -108,21 +122,6 @@ public class ItemRepository {
 		Integer pageNumber = form.getPageNumber();
 		Integer startNumber = 30 * (pageNumber - 1);
 		return startNumber;
-	}
-	
-	
-	/**
-	 * ページング機能に必要な総ページ数 は 「総データ数 ÷ 1ページあたりのデータ数」で求める。
-	 * そのため、商品の総データ数を取得するメソッド.
-	 * 
-	 * @return データ数
-	 */
-	public Integer countData() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT COUNT(id) FROM items");
-		SqlParameterSource param = new MapSqlParameterSource();
-		Integer count = template.queryForObject(sql.toString(), param, Integer.class);
-		return count;
 	}
 	
 	

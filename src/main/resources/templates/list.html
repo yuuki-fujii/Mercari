@@ -113,8 +113,14 @@
           <tr th:each="item : ${itemList}">
             <td class="item-name"><a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${nowPageNumber}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
             <td class="item-price" th:text="${item.price}">52.0</td>
-            <td class="item-category" th:text="${item.categoryNameAll}"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
-            <td class="item-brand" th:text="${item.brandName}"><a href="">Razer</a></td>
+            <td class="item-category">
+            	<div th:if="${item.categoryNameAll}">
+              		<a class="categoryLink" th:data-category="${item.bigCategoryName}" th:text="${item.bigCategoryName}">Electronics</a> /
+                	<a class="categoryLink" th:data-category="${item.bigCategoryName} + '/' + ${item.middleCategoryName}" th:text="${item.middleCategoryName}">Computers &amp; Tablets</a> /
+                	<a class="categoryLink" th:data-category="${item.bigCategoryName} + '/' + ${item.middleCategoryName} + '/' + ${item.smallCategoryName}" th:text="${item.smallCategoryName}">Components &amp; Parts</a>
+            	</div>
+            </td>
+            <td class="item-brand"><a class="brandLink" th:text="${item.brandName}">Razer</a></td>
             <td class="item-condition" th:text="${item.condition}">3</td>
           </tr>
         </tbody>

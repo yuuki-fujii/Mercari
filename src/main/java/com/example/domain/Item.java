@@ -91,6 +91,19 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	// プロパティ
+    public String getBigCategoryName() {
+        return categoryNameAll != null ? categoryNameAll.split("/")[0] : "";
+    }
+
+    public String getMiddleCategoryName() {
+        return categoryNameAll != null ? categoryNameAll.split("/")[1] : "";
+    }
+
+    public String getSmallCategoryName() {
+        return categoryNameAll != null ? categoryNameAll.split("/")[2] : "";
+    }
+	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", categoryId=" + categoryId

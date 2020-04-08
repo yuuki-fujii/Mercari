@@ -109,6 +109,20 @@ $(function(){
 		return categoryName;
 	}
 	
+    // カテゴリーリンククリック時のイベント処理設定
+    $('.categoryLink').on('click', function() {
+      $('#searchForm [name=categoryName]').val($(this).data('category'));
+      $('#searchForm [name=pageNumber]').val(1);
+      $('#searchForm').submit();
+    });
+	
+    // ブランド名リンククリック時のイベント処理設定
+    $('.brandLink').on('click', function() {
+      $('#searchForm [name=brandName]').val($(this).text());
+      $('#searchForm [name=pageNumber]').val(1);
+      $('#searchForm').submit();
+    });
+    
     // 検索ボタンクリック時のイベント処理設定
     $('#button-search').on('click', function() {
       $('#searchForm [name=pageNumber]').val(1);
