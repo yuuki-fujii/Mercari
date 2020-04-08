@@ -20,43 +20,28 @@ public class ShowCategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	
 	/**
-	 * 全ての大カテゴリを取得する.
+	 * 全カテゴリを取得する.
 	 * 
-	 * @return 大カテゴリリスト
+	 * @return 全カテゴリ
 	 */
-	public List<Category> getBigCategory(){
-		return categoryRepository.findAllBigCategory();
-	}
-	
-	
-	/**
-	 * 全ての中カテゴリを取得する.
-	 * 
-	 * @return　中カテゴリリスト
-	 */
-	public List<Category> getMiddleCategory(){
-		return categoryRepository.findAllMiddleCategory();
-	}
-	
-	/**
-	 * 全ての小カテゴリを取得する.
-	 * 
-	 * @return　小カテゴリリスト
-	 */
-	public List<Category> getSmallCategory(){
-		return categoryRepository.findAllSmallCategory();
-	}
-	
-	/**
-	 * 大カテゴリidから中カテゴリを検索する.
-	 * 
-	 * @param bigCategoryId 大カテゴリのid
-	 * @return 大カテゴリの子の関係にあたる全ての中カテゴリ
-	 */
-	public List <Category> getChildCategoryById(Integer parentId){
-		return categoryRepository.findChildCategoryByParentId(parentId);
+	public List<Category> findAllCategories(){
+		// 大カテゴリを取得
+		List <Category> bigCategoryList = categoryRepository.findByParentId(null);
+		
+		for (Category bigCategory: bigCategoryList) {
+			// 中カテゴリを取得
+			List <Category> middleCategoryList = categoryRepository.findByParentId(bigCategory.getId());
+			bigCategory.setChildCategories(middleCategoryList); 
+			
+			for (Category middleCategory : middleCategoryList) {
+				// 小カテゴリを取得
+				List <Category> smallCategoryList = categoryRepository.findByParentId(middleCategory.getId());
+				middleCategory.setChildCategories(smallCategoryList);
+			}
+		}
+		// 全カテゴリの情報が詰まった大カテゴリリストを返す
+		return bigCategoryList; 
 	}
 	
 }

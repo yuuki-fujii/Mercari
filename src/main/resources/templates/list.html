@@ -48,63 +48,49 @@
 
     <!-- 検索フォーム -->
     <div id="forms">
-      <form action="" class="form-inline" role="form" th:object="${searchForm}">
+      <form id="searchForm" class="form-inline" role="form" th:action="@{/item/search}" th:object="${searchForm}" >
         <div class="form-group">
           <input type="text" class="form-control" id="name" placeholder="item name" name="itemName" th:field="*{itemName}"/>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <select class="form-control" name="bigCategoryId" style="width: 150px">
-          	<option value="0">- 大カテゴリ -</option>
-          	<span th:each="bigCategory :${bigCategoryList}">
-            <option th:text="${bigCategory.name}" th:value="${bigCategory.id}">parentCategory1</option>
-            </span>
-
-          </select>
-          <select class="form-control" name="middleCategoryId" id="middleCategory" style="width: 200px">
-            <option value="0">- 中カテゴリ -</option>
-            <option value="-1">大カテゴリを選択してください</option>
-           
-          </select>
-          <select class="form-control" name="childCategoryId" id="childCategory" style="width: 200px">
-            <option value="0">- 小カテゴリ -</option>
-            <option value="-1">中カテゴリを選択してください</option>
-         
-          </select>
+          <select id="bigSelect" class="form-control" name="bigCategoryId"></select><input type="hidden" th:field="*{bigCategoryId}" />
+          <select id="middleSelect" class="form-control" name="middleCategoryId"></select><input type="hidden" th:field="*{middleCategoryId}" />
+          <select id="smallSelect" class="form-control" name="smallCategoryId"></select><input type="hidden" th:field="*{smallCategoryId}" />
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
           <input type="text" class="form-control" placeholder="brand name" name="brandName" th:field="*{brandName}"/>
         </div>
         <div class="form-group"></div>
-        <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
-      </form>
-    </div>
-
-	<!-- ページ番号を指定して表示するフォーム -->
+        <input type="hidden" name="categoryName" />
+        <button id="button-search" type="button" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
+      	<!-- ページ番号を指定して表示するフォーム -->
       <div id="select-page">
-        <form class="form-inline" method="post" th:action="@{/item/search}" th:object="${searchForm}"> 
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
               <input type="number" class="form-control" name="pageNumber" th:field="*{pageNumber}"/>
               <!-- 総ページ数 -->
-              <div class="input-group-addon" th:text="${maxPage}">/ 20</div>
+              <div class="input-group-addon">/ <span id="maxPage" th:text="${maxPage}">20</span></div>
             </div>
             <div class="input-group col-xs-1">
-              <button type="submit" class="btn btn-default">Go</button>
+              <button id="button-go" type="button" class="btn btn-default">Go</button>
             </div>
             <div th:text="${errorMessage}" style="color:red"></div>
           </div>
-        </form>
       </div>
+      </form>
+    </div>
+
+
 
     <!-- pagination -->
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }" ><span class="notTwiceBtn">&larr; prev</span></a></li>
-          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }"><span class="notTwiceBtn">next &rarr;</span></a></li>
+          <li class="previous"><a href="#"><span class="notTwiceBtn">&larr; prev</span></a></li>
+          <li class="next"><a href="#"><span class="notTwiceBtn">next &rarr;</span></a></li>
         </ul>
       </nav>
     </div>
@@ -145,11 +131,8 @@
       </nav>
       
     </div>
-  </div>
-  <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </div> 
   <!-- jsファイルの読み込み -->
-  <script src="../static/js/get_middle_category.js" th:src="@{/js/get_middle_category.js}"></script>
-  <script src="../static/js/get_small_category.js" th:src="@{/js/get_small_category.js}"></script>
+  <script src="../static/js/search.js" th:src="@{/js/search.js}"></script>
 </body>
 </html>

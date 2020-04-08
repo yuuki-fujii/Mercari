@@ -10,12 +10,16 @@ public class SearchForm {
 	
 	/** 商品名 */
 	private String itemName;
-	/** 大カテゴリid */
-	private Integer bigCategoryId;
-	/** 中カテゴリid */
-	private Integer middleCategoryId;
-	/** 小カテゴリid */
-	private Integer childCategoryId;
+	
+    // 検索には使用しない
+    // 検索完了時、プルダウンの状態を維持するのにJSから使用する	
+	private Integer bigCategoryId; /** 大カテゴリid */
+	private Integer middleCategoryId; /** 中カテゴリid */
+	private Integer smallCategoryId; /** 小カテゴリid */
+	
+	/** カテゴリ名（検索に使用する） */
+	private String categoryName;
+	
 	/** ブランド名 */
 	private String brandName;
 	/** ページ数 */
@@ -40,11 +44,18 @@ public class SearchForm {
 	public void setMiddleCategoryId(Integer middleCategoryId) {
 		this.middleCategoryId = middleCategoryId;
 	}
-	public Integer getChildCategoryId() {
-		return childCategoryId;
+	
+	public Integer getSmallCategoryId() {
+		return smallCategoryId;
 	}
-	public void setChildCategoryId(Integer childCategoryId) {
-		this.childCategoryId = childCategoryId;
+	public void setSmallCategoryId(Integer smallCategoryId) {
+		this.smallCategoryId = smallCategoryId;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	public String getBrandName() {
 		return brandName;
@@ -61,8 +72,7 @@ public class SearchForm {
 	@Override
 	public String toString() {
 		return "SearchForm [itemName=" + itemName + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
-				+ middleCategoryId + ", childCategoryId=" + childCategoryId + ", brandName=" + brandName
-				+ ", pageNumber=" + pageNumber + "]";
+				+ middleCategoryId + ", smallCategoryId=" + smallCategoryId + ", categoryName=" + categoryName
+				+ ", brandName=" + brandName + ", pageNumber=" + pageNumber + "]";
 	}
-	
 }

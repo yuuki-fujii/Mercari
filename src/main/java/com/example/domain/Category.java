@@ -1,5 +1,7 @@
 package com.example.domain;
 
+import java.util.List;
+
 /**
  * カテゴリを表すドメインクラス
  * 
@@ -16,6 +18,12 @@ public class Category {
 	private String name;
 	/** カテゴリ名全体 */
 	private String nameAll;
+	/**
+	 * 子カテゴリリスト
+	 * （例）大カテゴリは中カテゴリリスト、中カテゴリは小カテゴリリストを保持する
+	 * 
+	 */
+	private List <Category> childCategories;
 	
 	public Integer getId() {
 		return id;
@@ -41,8 +49,15 @@ public class Category {
 	public void setNameAll(String nameAll) {
 		this.nameAll = nameAll;
 	}
+	public List<Category> getChildCategories() {
+		return childCategories;
+	}
+	public void setChildCategories(List<Category> childCategories) {
+		this.childCategories = childCategories;
+	}
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", parentId=" + parentId + ", name=" + name + ", nameAll=" + nameAll + "]";
+		return "Category [id=" + id + ", parentId=" + parentId + ", name=" + name + ", nameAll=" + nameAll
+				+ ", childCategories=" + childCategories + "]";
 	}
 }

@@ -46,11 +46,9 @@ public class ItemRepository {
 	
 	
 	public List <Item> findBySerachForm(SearchForm form){
-		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		StringBuilder sql = createSql(form, params, null);
-		return template.query(sql.toString(), params,ITEM_ROW_MAPPER);
-		
+		return template.query(sql.toString(), params,ITEM_ROW_MAPPER);	
 	}
 	
 	
@@ -66,6 +64,11 @@ public class ItemRepository {
     	sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("WHERE 1 = 1 "); // 下記if文でwhere句を追加しやすいように常に真の条件を入れておく
 		
+        // カテゴリー
+        if (!StringUtils.isEmpty(form.getCategoryName())) {
+            sql.append("AND c.name_all LIKE :name_all ");
+            params.addValue("name_all", form.getCategoryName() + "%");
+        }
 		// 商品名曖昧検索
 		if (!StringUtils.isEmpty(form.getItemName())) {
 			sql.append("AND i.name LIKE :name ");
@@ -77,6 +80,9 @@ public class ItemRepository {
 			sql.append("AND b.name = :brandName ");
 			params.addValue("brandName", form.getBrandName());
 		}
+		
+
+		
 		
 		Integer startNumber = calcStartNumber(form);
 		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET "+ startNumber);

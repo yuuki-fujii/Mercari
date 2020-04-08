@@ -1,8 +1,8 @@
 package com.example.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchForm;
-import com.example.service.ShowCategoryService;
 import com.example.service.SearchItemListService;
+import com.example.service.ShowCategoryService;
 
 /**
  * 商品一覧画面を表示するコントローラー.
@@ -26,6 +26,9 @@ import com.example.service.SearchItemListService;
 @Controller
 @RequestMapping("/item")
 public class SearchItemListController {
+	
+	@Autowired
+    private HttpSession session;
 	
 	@Autowired
 	private SearchItemListService showItemListService;
@@ -62,52 +65,38 @@ public class SearchItemListController {
 			model.addAttribute("errorMessage", "1〜" + maxPage + "の数字を入力してください");
 			form.setPageNumber(1);
 		}
-		
-		System.out.println(form);
-		
+	
 		List <Item> itemList = showItemListService.searchItem(form);
 		
 		if (itemList.size() == 0) {
 			model.addAttribute("noItemMessage", "該当する商品がありません");
 		}
 		
-		// カテゴリをセット
-		List <Category> bigCategoryList = showCategoryService.getBigCategory();
-		
-		model.addAttribute("bigCategoryList", bigCategoryList);
 		model.addAttribute("nowPageNumber", form.getPageNumber());
 		model.addAttribute("maxPage", maxPage);
-		model.addAttribute("itemList", itemList);
+		model.addAttribute("itemList", showItemListService.searchItem(form));
 		return "list";
 	}
 		
-	
-	/**
-	 * 大カテゴリidから中カテゴリを検索する.
-	 * 
-	 * @param bigCategoryId 大カテゴリid
-	 * @return 該当する中カテゴリリスト
-	 */
+    /**
+     * 全カテゴリー情報を取得する.
+     * セッションに保持し、セッションにない場合のみDBから取得する.
+     *
+     * @return
+     */
 	@ResponseBody
-	@RequestMapping("/get_child_category")
-	public Map <String, List<Category>> getMiddleCategory(Integer parentId){
-		
-		Map <String, List<Category>> map = new HashMap<>();
-		// 先に宣言しておく
-		List <Category> childCategoryList = null;
-		
-		// 大カテゴリ（value = 0）に戻ったら中カテゴリもリセットされる
-		if ("0".equals(parentId.toString()) || "-1".equals(parentId.toString()) ) {
-			childCategoryList = null;
-		} else {
-			childCategoryList = showCategoryService.getChildCategoryById(parentId);
+	@RequestMapping("/categories")
+	public List<Category> getAllCategories(){
+		@SuppressWarnings("unchecked")
+		List<Category> categoryList = (List<Category>) session.getAttribute("categories");
+		if (categoryList == null) {
+			categoryList = showCategoryService.findAllCategories();
+			session.setAttribute("categoryList", categoryList);
 		}
-		
-		map.put("childCategoryList",childCategoryList);
-		return map;
+		return categoryList;
 	}
 	
-
+	
 	/**
 	 * 総ページ数を求める.
 	 * 
