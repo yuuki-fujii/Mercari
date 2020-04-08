@@ -53,7 +53,7 @@ public class SearchItemListController {
 	 * @return 検索結果
 	 */
 	@RequestMapping("/search")
-	public String search(Model model, SearchForm form) {
+	public String search(SearchForm form, Model model) {
 
 		if (form.getPageNumber() == null) {
 			form.setPageNumber(1);
@@ -75,23 +75,34 @@ public class SearchItemListController {
 			model.addAttribute("noItemMessage", "該当する商品がありません");
 		}
 		
-		
-		
 		model.addAttribute("nowPageNumber", form.getPageNumber());
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("itemList", showItemListService.searchItem(form));
+		
+		// プルダウンを維持するための記述
+		setCategoryIds(form, getCategories());
 		return "list";
 	}
 		
+
+	/**
+	 * JQueryのgetJSONメソッドから呼ばれる.
+	 * 
+	 * @return 全カテゴリ情報
+	 */
+	@ResponseBody
+	@RequestMapping("/categories")
+	public List<Category> getAllCategories(){
+		return getCategories();
+	}
+	
     /**
      * 全カテゴリー情報を取得する.
      * セッションに保持し、セッションにない場合のみDBから取得する.
      *
      * @return
      */
-	@ResponseBody
-	@RequestMapping("/categories")
-	public List<Category> getAllCategories(){
+	private List<Category> getCategories(){
 		@SuppressWarnings("unchecked")
 		List<Category> categoryList = (List<Category>) session.getAttribute("categories");
 		if (categoryList == null) {
@@ -100,6 +111,61 @@ public class SearchItemListController {
 		}
 		return categoryList;
 	}
+	
+    /**
+     * 検索完了時、カテゴリーのプルダウンを維持するために
+     * categoryNameから、daiCategoryId, chuCategoryId, syoCategoryId を求めてフォームにセットする.
+     *
+     * @param form
+     * @param categoryList
+     */
+    private void setCategoryIds(SearchForm form, List<Category> categoryList) {
+        // 一旦全てクリアーする
+        form.setBigCategoryId(null);
+        form.setMiddleCategoryId(null);
+        form.setSmallCategoryId(null);
+        
+        // カテゴリで検索された場合
+        if (form.getCategoryName() != null) {
+        	// /でsplitしてカテゴリを分ける
+            String[] categoryArray = form.getCategoryName().split("/");
+            // !"".equals(categoryArray[0])は、カテゴリを選択せずに検索された場合、categoryNameが''（空文字：nullではない）になるため必要
+            if (categoryArray.length >= 1 && !"".equals(categoryArray[0])) {
+            	// 大カテゴリ群から大カテゴリを検索
+                Category bigCategory = getCategoryByName(categoryList, categoryArray[0]);
+                form.setBigCategoryId(bigCategory.getId());
+                // 中カテゴリが選択されている場合
+                if (categoryArray.length >= 2) {
+                    Category middleCategory = getCategoryByName(bigCategory.getChildCategories(), categoryArray[1]);
+                    form.setMiddleCategoryId(middleCategory.getId());
+                    // 小カテゴリが選択されている場合
+                    if (categoryArray.length >= 3) {
+                        Category smallCategory = getCategoryByName(middleCategory.getChildCategories(), categoryArray[2]);
+                        form.setSmallCategoryId(smallCategory.getId());
+                    }
+                }
+            }
+        }
+    }
+	
+	
+    /**
+     * @param categoryList カテゴリー群
+     * @param categoryName カテゴリ名
+     * @return
+     */
+    private Category getCategoryByName(List<Category> categoryList, String categoryName) {
+        for (Category category : categoryList) {
+        	// 完全一致した場合返す
+            if (category.getName().equals(categoryName)) {
+                return category;
+            }
+        }
+        return null;
+    }
+	
+	
+	
 	
 	
 	/**

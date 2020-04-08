@@ -35,11 +35,13 @@ $(function(){
 			bigOptions += '<option value="' + bigCategory.id + '"' + selectedStr + '>' + bigCategory.name + '</option>';
 		}
 		$('#bigSelect').html(bigOptions);
+		createMiddleCategorySelect();
 	}
 		
 	// 中カテゴリのプルダウン作成
 	function createMiddleCategorySelect(){
 		let selectedBigCategoryValue = $('#bigSelect option:selected').val();
+		
 		// 大カテゴリ以外が選択された場合
 		if (selectedBigCategoryValue != '') {
 			for (let i = 0; i < bigCategories.length; i++) {
@@ -161,12 +163,12 @@ $(function(){
     });
     
 	// 大カテゴリが変更された時の処理
-	$('#searchForm [name=bigCategoryId]').on('change',function(){
+	$('#bigSelect').on('change',function(){
 		createMiddleCategorySelect();
 	});
 	
 	// 中カテゴリが変更された時の処理
-	$('#searchForm [name=middleCategoryId]').on('change',function(){
+	$('#middleSelect').on('change',function(){
 		createSmallCategorySelect();
 	});
 	
