@@ -15,7 +15,7 @@ import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchForm;
 import com.example.service.ShowCategoryService;
-import com.example.service.ShowItemListService;
+import com.example.service.SearchItemListService;
 
 /**
  * 商品一覧画面を表示するコントローラー.
@@ -25,10 +25,10 @@ import com.example.service.ShowItemListService;
  */
 @Controller
 @RequestMapping("/item")
-public class ShowItemListController {
+public class SearchItemListController {
 	
 	@Autowired
-	private ShowItemListService showItemListService;
+	private SearchItemListService showItemListService;
 	
 	@Autowired
 	private ShowCategoryService showCategoryService;
@@ -42,6 +42,13 @@ public class ShowItemListController {
 	private static final Integer COUNT_OF_PAGE_PER_PAGE = 30;
 	
 	
+	/**
+	 * 商品検索を行うメソッド.
+	 * 
+	 * @param model リクエストスコープ
+	 * @param form　商品検索フォーム
+	 * @return 検索結果
+	 */
 	@RequestMapping("/search")
 	public String search(Model model, SearchForm form) {
 		
@@ -56,9 +63,13 @@ public class ShowItemListController {
 			form.setPageNumber(1);
 		}
 		
-		// データの開始番号を求める
-		Integer startNumber = calcStartNumber(form.getPageNumber());
-		List <Item> itemList = showItemListService.getItemsOfOnePage(startNumber);
+		System.out.println(form);
+		
+		List <Item> itemList = showItemListService.searchItem(form);
+		
+		if (itemList.size() == 0) {
+			model.addAttribute("noItemMessage", "該当する商品がありません");
+		}
 		
 		// カテゴリをセット
 		List <Category> bigCategoryList = showCategoryService.getBigCategory();
@@ -117,14 +128,5 @@ public class ShowItemListController {
 	}
 	
 	
-	/**
-	 * 現在のページでの開始番号 - 1 を求める.
-	 * 
-	 * @param pageNumber 現在のページ数
-	 * @return　現在のページでの開始番号 - 1 (OFFSETで使う数字)
-	 */
-	private Integer calcStartNumber(Integer pageNumber) {
-		Integer startNumber = 30 * (pageNumber - 1);
-		return startNumber;
-	}
+
 }

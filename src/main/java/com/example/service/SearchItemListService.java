@@ -7,19 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.Item;
+import com.example.form.SearchForm;
 import com.example.repository.ItemRepository;
 
 @Service
 @Transactional
-public class ShowItemListService {
+public class SearchItemListService {
 	
 	@Autowired
 	private ItemRepository itemRepository;
 	
 	
 
-	public List<Item> getItemsOfOnePage(Integer startNumber){
-		return itemRepository.findItemsOfOnePage(startNumber);
+	public List<Item> searchItem(SearchForm form){
+		return itemRepository.findBySerachForm(form);
 	}
 	
 	
@@ -27,4 +28,6 @@ public class ShowItemListService {
 		return itemRepository.countData();
 	}
 	
+	
+
 }

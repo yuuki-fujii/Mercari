@@ -9,8 +9,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.thymeleaf.util.StringUtils;
 
 import com.example.domain.Item;
+import com.example.form.SearchForm;
 
 
 /**
@@ -42,22 +44,64 @@ public class ItemRepository {
 		return item;
 	};
 	
-	/**
-	 * 1ページ分の商品情報を求める.
-	 * 
-	 * @param startNumber　データの開始番号-1 (例)1番目から表示したい場合、OFFSET 0にする
-	 * @return 1ページ分の商品情報
-	 */
-	public List<Item> findItemsOfOnePage(Integer startNumber){
+	
+	public List <Item> findBySerachForm(SearchForm form){
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		StringBuilder sql = createSql(form, params, null);
+		return template.query(sql.toString(), params,ITEM_ROW_MAPPER);
+		
+	}
+	
+	
+	
+	private StringBuilder createSql(SearchForm form,MapSqlParameterSource params,String mode) {
+		
 		StringBuilder sql = new StringBuilder();
+		
+		// 共通部分
 		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
 		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description ");
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
-		sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
-		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET " + startNumber);
+    	sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
+		sql.append("WHERE 1 = 1 "); // 下記if文でwhere句を追加しやすいように常に真の条件を入れておく
 		
-		List <Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
-		return itemList;
+		// 商品名曖昧検索
+		if (!StringUtils.isEmpty(form.getItemName())) {
+			sql.append("AND i.name LIKE :name ");
+			params.addValue("name", "%" + form.getItemName() + "%");
+		} 
+		
+		// ブランド名検索　完全一致
+		if (!StringUtils.isEmpty(form.getBrandName())) {
+			sql.append("AND b.name = :brandName ");
+			params.addValue("brandName", form.getBrandName());
+		}
+		
+		Integer startNumber = calcStartNumber(form);
+		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET "+ startNumber);
+		
+		return sql;
+	}
+	
+	
+	
+
+
+
+
+	
+
+	/**
+	 * 現在のページでの開始番号 - 1 を求める.
+	 * 
+	 * @param form 商品検索フォーム
+	 * @return 現在のページでの開始番号 - 1 (OFFSETで使う数字)
+	 */
+	private Integer calcStartNumber(SearchForm form) {
+		Integer pageNumber = form.getPageNumber();
+		Integer startNumber = 30 * (pageNumber - 1);
+		return startNumber;
 	}
 	
 	

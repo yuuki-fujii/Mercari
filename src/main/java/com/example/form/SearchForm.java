@@ -9,7 +9,7 @@ package com.example.form;
 public class SearchForm {
 	
 	/** 商品名 */
-	private String name;
+	private String itemName;
 	/** 大カテゴリid */
 	private Integer bigCategoryId;
 	/** 中カテゴリid */
@@ -17,15 +17,16 @@ public class SearchForm {
 	/** 小カテゴリid */
 	private Integer childCategoryId;
 	/** ブランド名 */
-	private String brand;
+	private String brandName;
 	/** ページ数 */
 	private Integer pageNumber;
 	
-	public String getName() {
-		return name;
+	
+	public String getItemName() {
+		return itemName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 	public Integer getBigCategoryId() {
 		return bigCategoryId;
@@ -45,11 +46,11 @@ public class SearchForm {
 	public void setChildCategoryId(Integer childCategoryId) {
 		this.childCategoryId = childCategoryId;
 	}
-	public String getBrand() {
-		return brand;
+	public String getBrandName() {
+		return brandName;
 	}
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 	public Integer getPageNumber() {
 		return pageNumber;
@@ -59,9 +60,9 @@ public class SearchForm {
 	}
 	@Override
 	public String toString() {
-		return "SearchForm [name=" + name + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
-				+ middleCategoryId + ", childCategoryId=" + childCategoryId + ", brand=" + brand + ", pageNumber="
-				+ pageNumber + "]";
+		return "SearchForm [itemName=" + itemName + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
+				+ middleCategoryId + ", childCategoryId=" + childCategoryId + ", brandName=" + brandName
+				+ ", pageNumber=" + pageNumber + "]";
 	}
 	
 }

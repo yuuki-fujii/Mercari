@@ -48,33 +48,33 @@
 
     <!-- 検索フォーム -->
     <div id="forms">
-      <form action="" class="form-inline" role="form">
+      <form action="" class="form-inline" role="form" th:object="${searchForm}">
         <div class="form-group">
-          <input type="input" class="form-control" id="name" placeholder="item name"/>
+          <input type="text" class="form-control" id="name" placeholder="item name" name="itemName" th:field="*{itemName}"/>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <select class="form-control" name="bigCategory" style="width: 150px">
+          <select class="form-control" name="bigCategoryId" style="width: 150px">
           	<option value="0">- 大カテゴリ -</option>
           	<span th:each="bigCategory :${bigCategoryList}">
             <option th:text="${bigCategory.name}" th:value="${bigCategory.id}">parentCategory1</option>
             </span>
 
           </select>
-          <select class="form-control" name="middleCategory" id="middleCategory" style="width: 200px">
+          <select class="form-control" name="middleCategoryId" id="middleCategory" style="width: 200px">
             <option value="0">- 中カテゴリ -</option>
             <option value="-1">大カテゴリを選択してください</option>
            
           </select>
-          <select class="form-control" name="childCategory" id="childCategory" style="width: 200px">
-            <option>- 小カテゴリ -</option>
+          <select class="form-control" name="childCategoryId" id="childCategory" style="width: 200px">
+            <option value="0">- 小カテゴリ -</option>
             <option value="-1">中カテゴリを選択してください</option>
          
           </select>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="brand"/>
+          <input type="text" class="form-control" placeholder="brand name" name="brandName" th:field="*{brandName}"/>
         </div>
         <div class="form-group"></div>
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
@@ -108,7 +108,9 @@
         </ul>
       </nav>
     </div>
-
+	
+	
+	<h4 th:text="${noItemMessage}" style="color:red"></h4>
     <!-- table -->
     <div class="table-responsive">
       <table id="item-table" class="table table-hover table-condensed">
