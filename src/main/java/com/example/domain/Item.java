@@ -16,12 +16,14 @@ public class Item {
 	private String name;
 	/** 状態 */
 	private Integer condition;
-	/** カテゴリー名 */
-	private String category;
 	/** カテゴリーID */
 	private Integer categoryId;
+	/** 全カテゴリー名 */
+	private String categoryNameAll;
+	/** ブランドID */
+	private Integer brandId;
 	/** ブランド */
-	private String brand;
+	private String brandName;
 	/** 価格 */
 	private double price;
 	/** 配送 */
@@ -47,26 +49,29 @@ public class Item {
 	public void setCondition(Integer condition) {
 		this.condition = condition;
 	}
-	
-	
-	
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
 	public Integer getCategoryId() {
 		return categoryId;
 	}
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
-	public String getBrand() {
-		return brand;
+	public String getCategoryNameAll() {
+		return categoryNameAll;
 	}
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setCategoryNameAll(String categoryNameAll) {
+		this.categoryNameAll = categoryNameAll;
+	}
+	public Integer getBrandId() {
+		return brandId;
+	}
+	public void setBrandId(Integer brandId) {
+		this.brandId = brandId;
+	}
+	public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 	public double getPrice() {
 		return price;
@@ -88,10 +93,8 @@ public class Item {
 	}
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category
-				+ ", categoryId=" + categoryId + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping
-				+ ", description=" + description + "]";
+		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", categoryId=" + categoryId
+				+ ", categoryNameAll=" + categoryNameAll + ", brandId=" + brandId + ", brandName=" + brandName
+				+ ", price=" + price + ", shipping=" + shipping + ", description=" + description + "]";
 	}
-	
-	
 }

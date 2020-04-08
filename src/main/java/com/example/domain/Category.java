@@ -13,7 +13,7 @@ public class Category {
 	/** 親キー */
 	private Integer parentId;
 	/** カテゴリ名 */
-	private String categoryName;
+	private String name;
 	/** カテゴリ名全体 */
 	private String nameAll;
 	
@@ -29,11 +29,11 @@ public class Category {
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
-	public String getCategoryName() {
-		return categoryName;
+	public String getName() {
+		return name;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getNameAll() {
 		return nameAll;
@@ -41,11 +41,8 @@ public class Category {
 	public void setNameAll(String nameAll) {
 		this.nameAll = nameAll;
 	}
-	
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", parentId=" + parentId + ", categoryName=" + categoryName + ", nameAll="
-				+ nameAll + "]";
+		return "Category [id=" + id + ", parentId=" + parentId + ", name=" + name + ", nameAll=" + nameAll + "]";
 	}
-	
 }

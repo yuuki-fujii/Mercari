@@ -36,7 +36,7 @@ public class EditItemController {
 		EditItemForm form = new EditItemForm();
 		form.setName(item.getName());
 		form.setPrice(item.getPrice());
-		form.setBrand(item.getBrand());
+		
 		form.setCondition(item.getCondition());
 		form.setDescription(item.getDescription());
 		

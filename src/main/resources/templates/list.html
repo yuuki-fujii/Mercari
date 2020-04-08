@@ -26,7 +26,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="./list.html" th:href="@{/}">Rakus Items</a>
+      <a class="navbar-brand" href="./list.html" th:href="@{/item/search}">Rakus Items</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <div>
@@ -57,7 +57,7 @@
           <select class="form-control" name="bigCategory" style="width: 150px">
           	<option value="0">- 大カテゴリ -</option>
           	<span th:each="bigCategory :${bigCategoryList}">
-            <option th:text="${bigCategory.categoryName}" th:value="${bigCategory.id}">parentCategory1</option>
+            <option th:text="${bigCategory.name}" th:value="${bigCategory.id}">parentCategory1</option>
             </span>
 
           </select>
@@ -80,11 +80,28 @@
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       </form>
     </div>
-	
+
+	<!-- ページ番号を指定して表示するフォーム -->
+      <div id="select-page">
+        <form class="form-inline" method="post" th:action="@{/item/search}" th:object="${searchForm}"> 
+          <div class="form-group">
+            <div class="input-group col-xs-6">
+              <label></label>
+              <input type="number" class="form-control" name="pageNumber" th:field="*{pageNumber}"/>
+              <!-- 総ページ数 -->
+              <div class="input-group-addon" th:text="${maxPage}">/ 20</div>
+            </div>
+            <div class="input-group col-xs-1">
+              <button type="submit" class="btn btn-default">Go</button>
+            </div>
+            <div th:text="${errorMessage}" style="color:red"></div>
+          </div>
+        </form>
+      </div>
+
     <!-- pagination -->
     <div class="pages">
       <nav class="page-nav">
-      	現在：<span th:text="${nowPageNumber}"></span>ページ目<br>
         <ul class="pager">
           <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber - 1} }" ><span class="notTwiceBtn">&larr; prev</span></a></li>
           <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }"><span class="notTwiceBtn">next &rarr;</span></a></li>
@@ -108,8 +125,8 @@
           <tr th:each="item : ${itemList}">
             <td class="item-name"><a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${nowPageNumber}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
             <td class="item-price" th:text="${item.price}">52.0</td>
-            <td class="item-category" th:text="${item.category}"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
-            <td class="item-brand" th:text="${item.brand}"><a href="">Razer</a></td>
+            <td class="item-category" th:text="${item.categoryNameAll}"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
+            <td class="item-brand" th:text="${item.brandName}"><a href="">Razer</a></td>
             <td class="item-condition" th:text="${item.condition}">3</td>
           </tr>
         </tbody>
@@ -124,27 +141,7 @@
           <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#" th:href="@{'?pageNumber='+ ${nowPageNumber + 1} }"><span class="notTwiceBtn">next &rarr;</span></a></li>
         </ul>
       </nav>
-      <!-- ページ番号を指定して表示するフォーム -->
-      現在：<span th:text="${nowPageNumber}"></span>ページ目<br>
       
-      <div id="select-page">
-        <form class="form-inline" method="post" th:action="@{/search_page}"> 
-          <div class="form-group">
-            <div class="input-group col-xs-6">
-              <label></label>
-              <input type="hidden" name="nowPageNumberInt" th:value="${nowPageNumber}">
-              <input type="number" class="form-control" name="pageNumberForSearch"/>
-              <!-- 総ページ数 -->
-              <div class="input-group-addon" th:text="${countOfPage}">/ 20</div>
-            </div>
-            <div class="input-group col-xs-1">
-              <button type="submit" class="btn btn-default">Go</button>
-            </div>
-            <div th:text="${errorMessage}" style="color:red"></div>
-          </div>
-          
-        </form>
-      </div>
     </div>
   </div>
   <!-- JQuery -->

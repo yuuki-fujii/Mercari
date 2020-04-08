@@ -23,15 +23,12 @@ public class CategoryRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
-	/** テーブル名を定数化 */
-	private final String TABLE_NAME = "category";
-	
 	/** categoryドメインを生成するRowMapper */
 	public static final RowMapper<Category> CATEGORY_ROW_MAPPER = (rs,i) -> {
 		Category category = new Category();
 		category.setId(rs.getInt("id"));
 		category.setParentId(rs.getInt("parent_id"));
-		category.setCategoryName(rs.getString("category_name"));
+		category.setName(rs.getString("name"));
 		category.setNameAll(rs.getString("name_all"));
 		return category;
 	};
@@ -44,9 +41,9 @@ public class CategoryRepository {
 	 */
 	public List <Category> findAllBigCategory(){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,parent_id,category_name,name_all ");
-		sql.append("FROM " + TABLE_NAME);
-		sql.append(" WHERE parent_id IS NULL AND name_all IS NULL");
+		sql.append("SELECT id,parent_id,name,name_all ");
+		sql.append("FROM category ");
+		sql.append("WHERE parent_id IS NULL AND name_all IS NULL");
 		
 		List <Category> bigCategoryList = template.query(sql.toString(), CATEGORY_ROW_MAPPER);
 		return bigCategoryList;
@@ -59,9 +56,9 @@ public class CategoryRepository {
 	 */
 	public List <Category> findAllMiddleCategory(){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,parent_id,category_name,name_all ");
-		sql.append("FROM " + TABLE_NAME);
-		sql.append(" WHERE parent_id IS NOT NULL AND name_all IS NULL");
+		sql.append("SELECT id,parent_id,name,name_all ");
+		sql.append("FROM category ");
+		sql.append("WHERE parent_id IS NOT NULL AND name_all IS NULL");
 		
 		List <Category> middleCategoryList = template.query(sql.toString(), CATEGORY_ROW_MAPPER);
 		return middleCategoryList;
@@ -74,9 +71,9 @@ public class CategoryRepository {
 	 */
 	public List <Category> findAllSmallCategory(){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,parent_id,category_name,name_all ");
-		sql.append("FROM " + TABLE_NAME);
-		sql.append(" WHERE parent_id IS NOT NULL AND name_all IS NOT NULL");
+		sql.append("SELECT id,parent_id,name,name_all ");
+		sql.append("FROM category ");
+		sql.append("WHERE parent_id IS NOT NULL AND name_all IS NOT NULL");
 		
 		List <Category> smallCategoryList = template.query(sql.toString(), CATEGORY_ROW_MAPPER);
 		return smallCategoryList;
@@ -92,8 +89,8 @@ public class CategoryRepository {
 	 */
 	public List <Category> findChildCategoryByParentId(Integer parentId){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,parent_id,category_name,name_all ");
-		sql.append("FROM " + TABLE_NAME +" WHERE parent_id = :id");
+		sql.append("SELECT id,parent_id,name,name_all ");
+		sql.append("FROM category WHERE parent_id = :id");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id",parentId);
 		List <Category> middleCategoryList = template.query(sql.toString(), param,CATEGORY_ROW_MAPPER) ;
 		return middleCategoryList;

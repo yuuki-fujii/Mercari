@@ -25,43 +25,23 @@ public class ItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
-	/** テーブル名を定数化 */
-	private final String TABLE_NAME = "items";
 	
 	/** itemドメインを生成するRowMapper */
 	public static final RowMapper<Item> ITEM_ROW_MAPPER = (rs,i) -> {
 		Item item = new Item();
 		item.setId(rs.getInt("id"));
-		item.setName(rs.getString("name"));
+		item.setName(rs.getString("item_name"));
 		item.setCondition(rs.getInt("condition"));
-		item.setCategory(rs.getString("category_name"));
 		item.setCategoryId(rs.getInt("category_id"));
-		item.setBrand(rs.getString("brand"));
+		item.setCategoryNameAll(rs.getString("category_name_all"));
+		item.setBrandId(rs.getInt("brand_id"));
+		item.setBrandName(rs.getString("brand_name"));
 		item.setPrice(rs.getDouble("price"));
 		item.setShipping(rs.getInt("shipping"));
 		item.setDescription(rs.getString("description"));
 		return item;
 	};
 	
-//	private ResultSetExtractor<List<Item>> ITEM_RESULT_SET_EXTRACTOR = (rs) -> {
-//		List <Item> itemList = new ArrayList<>();
-//		while (rs.next()) {
-//			Item item = new Item();
-//			item.setId(rs.getInt("id"));
-//			item.setName(rs.getString("name"));
-//			item.setCondition(rs.getInt("condition"));
-//			item.setCategory(rs.getString("category_name"));
-//			item.setBrand(rs.getString("brand"));
-//			item.setPrice(rs.getDouble("price"));
-//			item.setShipping(rs.getInt("shipping"));
-//			item.setDescription(rs.getString("description"));
-//			itemList.add(item);
-//		}
-//		return itemList;
-//	};
-	
-	
-
 	/**
 	 * 1ページ分の商品情報を求める.
 	 * 
@@ -70,9 +50,10 @@ public class ItemRepository {
 	 */
 	public List<Item> findItemsOfOnePage(Integer startNumber){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name, c.id AS category_id,");
-		sql.append("i.brand,i.price,i.shipping,i.description ");
-		sql.append("FROM " + TABLE_NAME + " i LEFT OUTER JOIN category c ON i.category = c.id ");
+		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
+		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description ");
+		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
+		sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET " + startNumber);
 		
 		List <Item> itemList = template.query(sql.toString(), ITEM_ROW_MAPPER);
@@ -103,8 +84,10 @@ public class ItemRepository {
 	 */
 	public Item findById(Integer id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id,i.name,i.condition,c.name_all AS category_name,c.id AS category_id,i.brand,i.price,i.shipping,i.description ");
-		sql.append("FROM " + TABLE_NAME + " i LEFT OUTER JOIN category c ON i.category = c.id ");
+		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
+		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description ");
+		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
+		sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("WHERE i.id=:id");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		Item item = template.queryForObject(sql.toString(), param, ITEM_ROW_MAPPER);
@@ -121,7 +104,7 @@ public class ItemRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE " + TABLE_NAME + " SET name=:name , condition=:condition, category=:categoryId,");
+		sql.append("UPDATE items SET name=:name , condition=:condition, category=:categoryId,");
 		sql.append("brand=:brand, price=:price, shipping=:shipping, description=:description ");
 		sql.append("WHERE id=:id");
 		
