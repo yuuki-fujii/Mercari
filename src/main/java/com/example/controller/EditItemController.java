@@ -96,7 +96,7 @@ public class EditItemController {
 		if (!"".equals(form.getCategoryName())) {
 			String[] categoryArray = form.getCategoryName().split("/");
 			if (categoryArray.length == 1 || categoryArray.length == 2) {
-				result.rejectValue("bigCategoryId", null ,"カテゴリは大/中/小全て入力するか、全て空欄のどちらかのみ有効です");
+				result.rejectValue("smallCategoryId", null ,"カテゴリは大/中/小全て入力するか、全て空欄のどちらかのみ有効です");
 			} else {
 				item.setCategoryId(form.getSmallCategoryId());
 			}

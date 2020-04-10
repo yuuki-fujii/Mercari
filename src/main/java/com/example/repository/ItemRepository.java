@@ -27,7 +27,6 @@ public class ItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
-	
 	/** itemドメインを生成するRowMapper */
 	public static final RowMapper<Item> ITEM_ROW_MAPPER = (rs,i) -> {
 		Item item = new Item();
@@ -72,6 +71,14 @@ public class ItemRepository {
 	
 	
 	
+	/**
+	 * 検索条件によって異なるSQL文を発行する.
+	 * 
+	 * @param form 商品検索フォーム
+	 * @param params 
+	 * @param mode
+	 * @return
+	 */
 	private StringBuilder createSql(SearchForm form,MapSqlParameterSource params,String mode) {
 		
 		StringBuilder sql = new StringBuilder();
@@ -149,16 +156,26 @@ public class ItemRepository {
 	 * 
 	 * @param item 商品情報
 	 */
-	public void updateItem(Item item) {
+	public void update(Item item) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
-		
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE items SET name=:name , condition=:condition, category_id=:categoryId,");
 		sql.append("brand_id=:brandId, price=:price, shipping=:shipping, description=:description ");
 		sql.append("WHERE id=:id");
-		
 		template.update(sql.toString(), param);
-		
+	}
+	
+	/**
+	 * 商品情報を追加する.
+	 * 
+	 * @param item 商品情報
+	 */
+	public void insert(Item item) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO items (name,condition,category_id,brand_id,price,shipping,description) ");
+		sql.append("VALUES (:name,:condition,:categoryId,:brandId,:price,:shipping,:description) ");
+		template.update(sql.toString(), param);
 	}
 	
 }

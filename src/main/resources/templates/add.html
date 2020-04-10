@@ -15,7 +15,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>   
   <title>Rakus Items</title>
+  
+  <script>
+  $(function(){
+	  var tags = [ [(${brandListForAutocomplete})] ];
+	  
+	  $( "#brand" ).autocomplete({
+		    source: function(request,response){
+		    	var results = $.ui.autocomplete.filter(tags, request.term);
+		    	response(results.slice(0,20));
+		    }
+	  });
+  });
+  </script>
+  
 </head>
 <body>
   <!-- navbar -->
@@ -46,7 +63,7 @@
     <h2>Add</h2>
 
     <!-- add form -->
-    <form action="#" th:action="@{/add_item/insert}" method="POST" class="form-horizontal" th:object="${addItemForm}">
+    <form id="addItemForm" action="#" th:action="@{/add_item/insert}" method="POST" class="form-horizontal" th:object="${addItemForm}">
       <!-- pageNumber -->
       <input type="hidden" name="pageNumber" th:value="${pageNumber}">
       <!-- name -->
@@ -54,7 +71,7 @@
         <label for="inputName" class="col-sm-2 control-label">name</label>
         <div class="col-sm-8">
           <input type="text" class="form-control" id="inputName" th:field="*{name}"/>
-          <span class="text-danger" th:errors="*{name}">error:may not be empty</span>
+          <span style="color:red" th:errors="*{name}">error:may not be empty</span>
         </div>
       </div>
       <!-- price -->
@@ -62,61 +79,34 @@
         <label for="price" class="col-sm-2 control-label">price</label>
         <div class="col-sm-8">
           <input type="number" step="0.1" class="form-control" id="price" th:field="*{price}"/>
-          <span class="text-danger" th:errors="*{price}">error:may not be empty</span>
         </div>
       </div>
       <!-- category -->
       <div class="form-group">
         <label for="category" class="col-sm-2 control-label">category</label>
         <div class="col-sm-8">
-          <select class="form-control">
-            <option>-- parentCategory --</option>
-            <option>parentCategory1</option>
-            <option>parentCategory2</option>
-            <option>parentCategory3</option>
-            <option>parentCategory4</option>
-            <option>parentCategory5</option>
-          </select>
+          <select id="bigSelect" class="form-control"></select><input type="hidden" th:field="*{bigCategoryId}"/>
         </div>
       </div>
       <div class="form-group">
         <label for="category" class="col-sm-2 control-label"></label>
         <div class="col-sm-8">
-          <select class="form-control">
-            <option>-- childCategory --</option>
-            <option>childCategory1</option>
-            <option>childCategory2</option>
-            <option>childCategory3</option>
-            <option>childCategory4</option>
-            <option>childCategory5</option>
-          </select>
+          <select id="middleSelect" class="form-control"></select><input type="hidden" th:field="*{middleCategoryId}" />
         </div>
       </div>
       <div class="form-group">
         <label for="category" class="col-sm-2 control-label"></label>
         <div class="col-sm-8">
-          <select class="form-control">
-            <option>-- grandChild --</option>
-            <option>grandChild1</option>
-            <option>grandChild2</option>
-            <option>grandChild3</option>
-            <option>grandChild4</option>
-            <option>grandChild5</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="category" class="col-sm-2 control-label"></label>
-        <div class="col-sm-8">
-          <span class="text-danger">error:may not be empty</span>
+          <select id="smallSelect" class="form-control"></select><input type="hidden" th:field="*{smallCategoryId}"/>
+          <span th:errors="*{smallCategoryId}" style="color:red"></span>
         </div>
       </div>
       <!-- brand -->
       <div class="form-group">
         <label for="brand" class="col-sm-2 control-label">brand</label>
         <div class="col-sm-8">
-          <input type="text" id="brand" class="form-control" name="brand" th:field="*{brand}"/>
-          <!-- <span class="text-danger">error:may not be empty</span> -->
+          <input id="brand" type="text" class="form-control" name="brandName" th:field="*{brandName}"/>
+          <span style="color:red" th:errors="*{brandName}">error:may not be empty</span>
         </div>
       </div>
       <!-- condition -->
@@ -135,9 +125,9 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="category" class="col-sm-2 control-label"></label>
+        <label for="condition" class="col-sm-2 control-label"></label>
         <div class="col-sm-8">
-          <span class="text-danger" th:errors="*{condition}">error:may not be empty</span>
+          <span style="color:red" th:errors="*{condition}">error:may not be empty</span>
         </div>
       </div>
       <!-- description -->
@@ -145,16 +135,18 @@
         <label for="description" class="col-sm-2 control-label">description</label>
         <div class="col-sm-8">
           <textarea name="description" id="description" class="form-control" rows="5" th:field="*{description}"></textarea>
-          <span class="text-danger" th:errors="*{description}">error:may not be empty</span>
+          <span style="color:red" th:errors="*{description}">error:may not be empty</span>
         </div>
       </div>
       <!-- submit button -->
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Submit</button>
+          <input type="hidden" name="categoryName" />
+          <button id="button-add" type="button" class="btn btn-default">Submit</button>
         </div>
       </div>
     </form>
   </div>
+  <script src="../static/js/addItem.js" th:src="@{/js/addItem.js}"></script> 
 </body>
 </html>

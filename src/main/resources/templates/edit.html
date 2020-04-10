@@ -104,6 +104,7 @@
           <label for="category" class="col-sm-2 control-label"></label>
           <div class="col-sm-8">
             <select id="smallSelect" class="form-control"></select><input type="hidden" th:field="*{smallCategoryId}"/>
+            <span th:errors="*{smallCategoryId}" style="color:red"></span>
           </div>
         </div>
         <!-- brand -->
@@ -148,6 +149,6 @@
         </div>
       </form>
     </div>
-    <script src="../static/js/edit.js" th:src="@{/js/edit.js}"></script> 
+    <script src="../static/js/editItem.js" th:src="@{/js/editItem.js}"></script> 
 </body>
 </html>

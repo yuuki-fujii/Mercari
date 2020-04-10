@@ -7,27 +7,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.domain.Item;
 import com.example.repository.ItemRepository;
 
-/**
- * 商品を編集するためのサービス.
- * 
- * @author yuuki
- *
- */
 @Service
 @Transactional
-public class EditItemSerivice {
+public class AddItemService {
 	
 	@Autowired
 	private ItemRepository itemRepository;
 	
-	
 	/**
-	 * 商品情報を更新する.
+	 * 商品を追加する.
 	 * 
 	 * @param item 商品情報
 	 */
-	public void editItem(Item item) {
-		itemRepository.update(item);
+	public void addItem(Item item) {
+		itemRepository.insert(item);
 	}
-	
 }

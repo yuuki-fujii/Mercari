@@ -17,19 +17,24 @@ public class AddItemForm {
 	@NotBlank(message = "nameを入力してください")
 	private String name;
 	/** 価格 */
-	@NotNull(message = "priceを入力してください")
 	private double price;
-	/** カテゴリーID */
-	private Integer categoryId;
+	/** カテゴリid */
+	// 追加画面にセットしておくために使う
+	private Integer bigCategoryId; /** 大カテゴリid */
+	private Integer middleCategoryId; /** 中カテゴリid */
+	// DBに保存されるのは小カテゴリid
+	private Integer smallCategoryId; /** 小カテゴリid */
+	/** カテゴリ名 */
+	private String categoryName;
+	
 	/** ブランド */
-	private String brand;
+	private String brandName;
 	/** 状態 */
 	@NotNull(message = "conditionを入力してください")
 	private Integer condition;
 	/** 説明 */
 	@NotBlank(message = "descriptionを入力してください")
 	private String description;
-	
 	
 	public Integer getPageNumber() {
 		return pageNumber;
@@ -49,17 +54,35 @@ public class AddItemForm {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public Integer getCategoryId() {
-		return categoryId;
+	public Integer getBigCategoryId() {
+		return bigCategoryId;
 	}
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
+	public void setBigCategoryId(Integer bigCategoryId) {
+		this.bigCategoryId = bigCategoryId;
 	}
-	public String getBrand() {
-		return brand;
+	public Integer getMiddleCategoryId() {
+		return middleCategoryId;
 	}
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setMiddleCategoryId(Integer middleCategoryId) {
+		this.middleCategoryId = middleCategoryId;
+	}
+	public Integer getSmallCategoryId() {
+		return smallCategoryId;
+	}
+	public void setSmallCategoryId(Integer smallCategoryId) {
+		this.smallCategoryId = smallCategoryId;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 	public Integer getCondition() {
 		return condition;
@@ -73,10 +96,12 @@ public class AddItemForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	@Override
 	public String toString() {
-		return "AddItemForm [pageNumber=" + pageNumber + ", name=" + name + ", price=" + price + ", categoryId="
-				+ categoryId + ", brand=" + brand + ", condition=" + condition + ", description=" + description + "]";
+		return "AddItemForm [pageNumber=" + pageNumber + ", name=" + name + ", price=" + price + ", bigCategoryId="
+				+ bigCategoryId + ", middleCategoryId=" + middleCategoryId + ", smallCategoryId=" + smallCategoryId
+				+ ", categoryName=" + categoryName + ", brandName=" + brandName + ", condition=" + condition
+				+ ", description=" + description + "]";
 	}
-	
 }
