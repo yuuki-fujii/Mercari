@@ -82,8 +82,8 @@
         <div class="form-group">
           <label for="price" class="col-sm-2 control-label">price</label>
           <div class="col-sm-8">
-            <input type="number" step="0.1" class="form-control" id="price" name="price" th:field="*{price}"/>
-            <span th:errors="*{price}" style="color:red"></span>
+            <input type="number" step="0.1" class="form-control" id="price" name="priceString" th:field="*{price}"/>
+            <span th:errors="*{priceString}" style="color:red"></span>
           </div>
         </div>
         <!-- category -->

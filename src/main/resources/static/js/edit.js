@@ -22,15 +22,6 @@ $(function(){
 			// 成功しても失敗しても通る
 		});
 	
-	// 動作確認用
-	var bigCategoryId = $('#editItemForm [name=bigCategoryId]').val();
-	var middleCategoryId = $('#editItemForm [name=middleCategoryId]').val();
-	var smallCategoryId = $('#editItemForm [name=smallCategoryId]').val();
-	
-	console.log('大カテゴリid : ' + bigCategoryId);
-	console.log('中カテゴリid : ' + middleCategoryId);
-	console.log('小カテゴリid : ' + smallCategoryId);
-	
 	// 大カテゴリのプルダウン作成
 	function createBigCategorySelect(){
 		var bigOptions = '<option value="">- 大カテゴリ -</option>';
@@ -121,9 +112,15 @@ $(function(){
 	
     // 検索ボタンクリック時のイベント処理設定
     $('#button-edit').on('click', function() {
-      var str = new String(createCategoryName());
+      var price = $('#editItemForm [name=price]').val();
+      var strPrice = new String(price)
+      if ('' == strPrice) {
+    	  $('#editItemForm [name=price]').val(null);
+      }
+    	
+      var categoryName = new String(createCategoryName());
       // 空文字の時は全てのカテゴリidをnullにする
-      if ('' == str) {
+      if ('' == categoryName) {
     	  $('#editItemForm [name=bigCategoryId]').val(null); 
     	  $('#editItemForm [name=middleCategoryId]').val(null); 
     	  $('#editItemForm [name=smallCategoryId]').val(null); 

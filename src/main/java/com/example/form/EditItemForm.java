@@ -1,6 +1,9 @@
 package com.example.form;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 /**
  * 商品情報を編集するためのフォーム.
@@ -17,9 +20,11 @@ public class EditItemForm {
 	/** 商品名 */
 	@NotBlank(message = "nameを入力してください")
 	private String name;
-	/** 価格（double型） */
+	/** 価格（バリデーション用） */
+	@Pattern(regexp = "^?(0|[1-9]\\d*)(\\.\\d+|)$", message = "priceが不正な値です")
+	private String priceString;
+	
 	private double price;
-
 	/** カテゴリid */
 	// 編集画面にセットしておくために使う
 	private Integer bigCategoryId; /** 大カテゴリid */
@@ -53,8 +58,20 @@ public class EditItemForm {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getPriceString() {
+		return priceString;
+	}
+	public void setPriceString(String priceString) {
+		this.priceString = priceString;
+	}
+	// 文字列で受けたpriceをdouble型で渡す
+	// 小数第2位を四捨五入する
 	public double getPrice() {
-		return price;
+		// 誤差がないようにBigDecimalで四捨五入を行い、その後double型に変換する
+		BigDecimal bigDecimalPrice = new BigDecimal(price);
+		bigDecimalPrice = bigDecimalPrice.setScale(1, BigDecimal.ROUND_HALF_UP);
+		Double doublePrice = bigDecimalPrice.doubleValue();
+		return doublePrice;
 	}
 	public void setPrice(double price) {
 		this.price = price;

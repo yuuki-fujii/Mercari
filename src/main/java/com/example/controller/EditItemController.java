@@ -123,7 +123,8 @@ public class EditItemController {
 		}
 		
 		BeanUtils.copyProperties(form, item);
-		
+		// 価格は手動でセットする
+		item.setPrice(form.getPrice());
 		
 		editItemSerivice.editItem(item);
 		return "redirect:/item/search";
