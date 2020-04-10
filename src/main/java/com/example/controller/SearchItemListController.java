@@ -2,8 +2,6 @@ package com.example.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchForm;
-import com.example.service.SearchItemListService;
 import com.example.service.BrandService;
 import com.example.service.CategoryService;
+import com.example.service.SearchItemListService;
 
 /**
  * 商品一覧画面を表示するコントローラー.
@@ -29,13 +27,10 @@ import com.example.service.CategoryService;
 public class SearchItemListController {
 	
 	@Autowired
-    private HttpSession session;
-	
-	@Autowired
 	private SearchItemListService showItemListService;
 	
 	@Autowired
-	private CategoryService showCategoryService;
+	private CategoryService categoryService;
 	
 	@Autowired
 	private BrandService brandService;
@@ -84,7 +79,7 @@ public class SearchItemListController {
 		model.addAttribute("itemList", showItemListService.searchItem(form));
 		model.addAttribute("brandListForAutocomplete", brandService.getBrandListForAutocomplete());
 		// プルダウンを維持するための記述
-		setCategoryIds(form, getCategories());
+		setCategoryIds(form, categoryService.findAllCategories());
 		return "list";
 	}
 		
@@ -97,33 +92,17 @@ public class SearchItemListController {
 	@ResponseBody
 	@RequestMapping("/categories")
 	public List<Category> getAllCategories(){
-		return getCategories();
+		return categoryService.findAllCategories();
 	}
 	
-    /**
-     * 全カテゴリー情報を取得する.
-     * セッションに保持し、セッションにない場合のみDBから取得する.
-     *
-     * @return
-     */
-	private List<Category> getCategories(){
-		@SuppressWarnings("unchecked")
-		List<Category> categoryList = (List<Category>) session.getAttribute("categories");
-		if (categoryList == null) {
-			categoryList = showCategoryService.findAllCategories();
-			session.setAttribute("categoryList", categoryList);
-		}
-		return categoryList;
-	}
-	
-    /**
+	/**
      * 検索完了時、カテゴリーのプルダウンを維持するために
-     * categoryNameから、daiCategoryId, chuCategoryId, syoCategoryId を求めてフォームにセットする.
+     * categoryNameから、bigCategoryId, middleCategoryId, smallCategoryId を求めてフォームにセットする.
      *
-     * @param form
+     * @param form 商品検索フォーム
      * @param categoryList
      */
-    private void setCategoryIds(SearchForm form, List<Category> categoryList) {
+    public void setCategoryIds(SearchForm form, List<Category> categoryList) {
         // 一旦全てクリアーする
         form.setBigCategoryId(null);
         form.setMiddleCategoryId(null);
@@ -136,40 +115,21 @@ public class SearchItemListController {
             // !"".equals(categoryArray[0])は、カテゴリを選択せずに検索された場合、categoryNameが''（空文字：nullではない）になるため必要
             if (categoryArray.length >= 1 && !"".equals(categoryArray[0])) {
             	// 大カテゴリ群から大カテゴリを検索
-                Category bigCategory = getCategoryByName(categoryList, categoryArray[0]);
+                Category bigCategory = categoryService.getCategoryByName(categoryList, categoryArray[0]);
                 form.setBigCategoryId(bigCategory.getId());
                 // 中カテゴリが選択されている場合
                 if (categoryArray.length >= 2) {
-                    Category middleCategory = getCategoryByName(bigCategory.getChildCategories(), categoryArray[1]);
+                    Category middleCategory = categoryService.getCategoryByName(bigCategory.getChildCategories(), categoryArray[1]);
                     form.setMiddleCategoryId(middleCategory.getId());
                     // 小カテゴリが選択されている場合
                     if (categoryArray.length >= 3) {
-                        Category smallCategory = getCategoryByName(middleCategory.getChildCategories(), categoryArray[2]);
+                        Category smallCategory = categoryService.getCategoryByName(middleCategory.getChildCategories(), categoryArray[2]);
                         form.setSmallCategoryId(smallCategory.getId());
                     }
                 }
             }
         }
     }
-	
-	
-    /**
-     * @param categoryList カテゴリー群
-     * @param categoryName カテゴリ名
-     * @return
-     */
-    private Category getCategoryByName(List<Category> categoryList, String categoryName) {
-        for (Category category : categoryList) {
-        	// 完全一致した場合返す
-            if (category.getName().equals(categoryName)) {
-                return category;
-            }
-        }
-        return null;
-    }
-	
-	
-	
 	
 	
 	/**
@@ -188,7 +148,5 @@ public class SearchItemListController {
 		}
 		return maxPage;
 	}
-	
-	
 
 }

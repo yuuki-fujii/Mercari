@@ -12,7 +12,7 @@
     integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
   <link rel="stylesheet" href="./mercari.css" th:href="@{/css/mercari.css}"/>
   <!-- script -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -65,7 +65,7 @@
     <h2>Edit</h2>
 
     <!-- edit form -->
-    <form action="#" th:action="@{/edit_item/update}" method="POST" class="form-horizontal" th:object="${editItemForm}">
+    <form id="editItemForm" action="#" th:action="@{/edit_item/update}" method="POST" class="form-horizontal" th:object="${editItemForm}">
     	<!-- pageNumber -->
     	<input type="hidden" name="pageNumber" th:value="${pageNumber}">
     	<!-- id -->
@@ -90,40 +90,20 @@
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label">category</label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- parentCategory -</option>
-              <option>parentCategory1</option>
-              <option>parentCategory2</option>
-              <option>parentCategory3</option>
-              <option>parentCategory4</option>
-              <option>parentCategory5</option>
-            </select>
+          	<span th:errors="*{bigCategoryId}" style="color:red"></span>
+            <select id="bigSelect" class="form-control"></select><input type="hidden" th:field="*{bigCategoryId}"/>
           </div>
         </div>
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label"></label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- childCategory -</option>
-              <option>childCategory1</option>
-              <option>childCategory2</option>
-              <option>childCategory3</option>
-              <option>childCategory4</option>
-              <option>childCategory5</option>
-            </select>
+            <select id="middleSelect" class="form-control"></select><input type="hidden" th:field="*{middleCategoryId}" />
           </div>
         </div>
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label"></label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- grandChild -</option>
-              <option>grandChild1</option>
-              <option>grandChild2</option>
-              <option>grandChild3</option>
-              <option>grandChild4</option>
-              <option>grandChild5</option>
-            </select>
+            <select id="smallSelect" class="form-control"></select><input type="hidden" th:field="*{smallCategoryId}"/>
           </div>
         </div>
         <!-- brand -->
@@ -162,10 +142,12 @@
         <!-- submit button -->
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Submit</button>
+          	<input type="hidden" name="categoryName" />
+            <button id="button-edit" type="button" class="btn btn-default">Submit</button>
           </div>
         </div>
       </form>
     </div>
+    <script src="../static/js/edit.js" th:src="@{/js/edit.js}"></script> 
 </body>
 </html>

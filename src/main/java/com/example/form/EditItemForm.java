@@ -15,10 +15,18 @@ public class EditItemForm {
 	/** ページ数 */
 	private Integer pageNumber;
 	/** 商品名 */
-	@NotBlank(message = "商品名を入力してください")
+	@NotBlank(message = "nameを入力してください")
 	private String name;
 	/** 価格（double型） */
 	private double price;
+
+	/** カテゴリid */
+	// 編集画面にセットしておくために使う
+	private Integer bigCategoryId; /** 大カテゴリid */
+	private Integer middleCategoryId; /** 中カテゴリid */
+	// DBに保存されるのは小カテゴリid
+	private Integer smallCategoryId; /** 小カテゴリid */
+	
 	/** カテゴリ名 */
 	private String categoryName; 
 	/** ブランド名 */
@@ -27,7 +35,6 @@ public class EditItemForm {
 	private Integer condition;
 	/** 説明 */
 	private String description;
-	
 	public Integer getId() {
 		return id;
 	}
@@ -51,6 +58,24 @@ public class EditItemForm {
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public Integer getBigCategoryId() {
+		return bigCategoryId;
+	}
+	public void setBigCategoryId(Integer bigCategoryId) {
+		this.bigCategoryId = bigCategoryId;
+	}
+	public Integer getMiddleCategoryId() {
+		return middleCategoryId;
+	}
+	public void setMiddleCategoryId(Integer middleCategoryId) {
+		this.middleCategoryId = middleCategoryId;
+	}
+	public Integer getSmallCategoryId() {
+		return smallCategoryId;
+	}
+	public void setSmallCategoryId(Integer smallCategoryId) {
+		this.smallCategoryId = smallCategoryId;
 	}
 	public String getCategoryName() {
 		return categoryName;
@@ -76,11 +101,12 @@ public class EditItemForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
 	@Override
 	public String toString() {
 		return "EditItemForm [id=" + id + ", pageNumber=" + pageNumber + ", name=" + name + ", price=" + price
-				+ ", categoryName=" + categoryName + ", brandName=" + brandName + ", condition=" + condition
-				+ ", description=" + description + "]";
-	}	
+				+ ", bigCategoryId=" + bigCategoryId + ", middleCategoryId=" + middleCategoryId + ", smallCategoryId="
+				+ smallCategoryId + ", categoryName=" + categoryName + ", brandName=" + brandName + ", condition="
+				+ condition + ", description=" + description + "]";
+	}
+	
 }

@@ -1,5 +1,5 @@
 /**
- *  商品検索画面におけるJavaScriptの動作をまとめたファイル
+ * 商品編集画面におけるJavaScriptの動作をまとめたファイル
  */
 $(function(){
 	var hostUrl = "http://localhost:8080/item/categories";
@@ -22,6 +22,15 @@ $(function(){
 			// 成功しても失敗しても通る
 		});
 	
+	// 動作確認用
+	var bigCategoryId = $('#editItemForm [name=bigCategoryId]').val();
+	var middleCategoryId = $('#editItemForm [name=middleCategoryId]').val();
+	var smallCategoryId = $('#editItemForm [name=smallCategoryId]').val();
+	
+	console.log('大カテゴリid : ' + bigCategoryId);
+	console.log('中カテゴリid : ' + middleCategoryId);
+	console.log('小カテゴリid : ' + smallCategoryId);
+	
 	// 大カテゴリのプルダウン作成
 	function createBigCategorySelect(){
 		var bigOptions = '<option value="">- 大カテゴリ -</option>';
@@ -31,13 +40,13 @@ $(function(){
 			// 飛田さんのコード　三項演算子が使われている
 			// 三項演算子　条件 ? trueの時の値 : falseの時の値
 			// bigCategory.idが存在する場合、selected そうでない場合は空文字
-			let selectedStr = $('#searchForm [name=bigCategoryId]').val() == bigCategory.id ? ' selected' : '';			
+			let selectedStr = $('#editItemForm [name=bigCategoryId]').val() == bigCategory.id ? ' selected' : '';			
 			bigOptions += '<option value="' + bigCategory.id + '"' + selectedStr + '>' + bigCategory.name + '</option>';
 		}
 		$('#bigSelect').html(bigOptions);
 		createMiddleCategorySelect();
 	}
-		
+	
 	// 中カテゴリのプルダウン作成
 	function createMiddleCategorySelect(){
 		let selectedBigCategoryValue = $('#bigSelect option:selected').val();
@@ -52,7 +61,7 @@ $(function(){
 					middleCategories = bigCategory.childCategories;
 					for (let j = 0; j < middleCategories.length; j++) {
 						let middleCategory = middleCategories[j];
-						let selectedStr = $('#searchForm [name=middleCategoryId]').val() == middleCategory.id ? ' selected' : '';
+						let selectedStr = $('#editItemForm [name=middleCategoryId]').val() == middleCategory.id ? ' selected' : '';
 			            middleOptions += '<option value="' + middleCategory.id + '"' + selectedStr + '>' + middleCategory.name + '</option>';
 					}
 					$('#middleSelect').html(middleOptions);
@@ -80,7 +89,7 @@ $(function(){
 					smallCategories = middleCategory.childCategories;
 					for (let j = 0; j < smallCategories.length; j++) {
 						let smallCategory = smallCategories[j];
-						let selectedStr = $('#searchForm [name=smallCategoryId]').val() == smallCategory.id ? ' selected' : '';
+						let selectedStr = $('#editItemForm [name=smallCategoryId]').val() == smallCategory.id ? ' selected' : '';
 			            smallOptions += '<option value="' + smallCategory.id + '"' + selectedStr + '>' + smallCategory.name + '</option>';
 					}
 					$('#smallSelect').html(smallOptions);
@@ -88,7 +97,7 @@ $(function(){
 			}	
 		} else {
 			$('#smallSelect').html('');
-		    $('#searchForm [name=smallCategoryId]').val('');
+			$('#smallSelect').val('');
 		}
 	}
 	
@@ -107,61 +116,22 @@ $(function(){
 				}
 			}
 		}
-		console.log(categoryName);
 		return categoryName;
 	}
 	
-    // カテゴリーリンククリック時のイベント処理設定
-    $('.categoryLink').on('click', function() {
-      $('#searchForm [name=categoryName]').val($(this).data('category'));
-      $('#searchForm [name=pageNumber]').val(1);
-      $('#searchForm').submit();
-    });
-	
-    // ブランド名リンククリック時のイベント処理設定
-    $('.brandLink').on('click', function() {
-      $('#searchForm [name=brandName]').val($(this).text());
-      $('#searchForm [name=pageNumber]').val(1);
-      $('#searchForm').submit();
-    });
-    
     // 検索ボタンクリック時のイベント処理設定
-    $('#button-search').on('click', function() {
-      $('#searchForm [name=pageNumber]').val(1);
-      $('#searchForm [name=categoryName]').val(createCategoryName());
-      $('#searchForm').submit();
+    $('#button-edit').on('click', function() {
+      var str = new String(createCategoryName());
+      // 空文字の時は全てのカテゴリidをnullにする
+      if ('' == str) {
+    	  $('#editItemForm [name=bigCategoryId]').val(null); 
+    	  $('#editItemForm [name=middleCategoryId]').val(null); 
+    	  $('#editItemForm [name=smallCategoryId]').val(null); 
+      }
+      $('#editItemForm [name=categoryName]').val(createCategoryName());
+      $('#editItemForm').submit();
     });
 	
-    // Goボタンクリック時のイベント処理設定
-    $('#button-go').on('click', function() {
-      $('#searchForm [name=categoryName]').val(createCategoryName()); // プルダウンの入力内容をそのまま反映させるため
-      $('#searchForm').submit();
-    });
-	
-    // next,previousリンクの無効化
-    var currentPage = parseInt($('#searchForm [name=pageNumber]').val());
-    var maxPage = parseInt($('#maxPage').text());
-    if (currentPage == 1) {
-      $('.previous').addClass('disabled');
-    }
-    if (currentPage == maxPage) {
-      $('.next').addClass('disabled');
-    }
-    
-    // nextリンククリック時のイベント処理設定
-    $('.next').on('click', function() {
-      $('#searchForm [name=pageNumber]').val(currentPage + 1);
-      $('#searchForm [name=categoryName]').val(createCategoryName());
-      $('#searchForm').submit();
-    });
-
-    // previousリンククリック時のイベント処理設定
-    $('.previous').on('click', function() {
-      $('#searchForm [name=pageNumber]').val(currentPage - 1);
-      $('#searchForm [name=categoryName]').val(createCategoryName());
-      $('#searchForm').submit();
-    });
-    
 	// 大カテゴリが変更された時の処理
 	$('#bigSelect').on('change',function(){
 		createMiddleCategorySelect();

@@ -2,6 +2,8 @@ package com.example.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,28 +22,52 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
+	@Autowired
+    private HttpSession session;
+	
 	/**
-	 * 全カテゴリを取得する.
+	 *  全カテゴリの情報が詰まった大カテゴリリストを作成し返す.
 	 * 
 	 * @return 全カテゴリ
 	 */
 	public List<Category> findAllCategories(){
-		// 大カテゴリを取得
-		List <Category> bigCategoryList = categoryRepository.findByParentId(null);
+		@SuppressWarnings("unchecked")
+		List<Category> categoryList = (List<Category>) session.getAttribute("categories");
 		
-		for (Category bigCategory: bigCategoryList) {
-			// 中カテゴリを取得
-			List <Category> middleCategoryList = categoryRepository.findByParentId(bigCategory.getId());
-			bigCategory.setChildCategories(middleCategoryList); 
+		if (categoryList == null) {
+			// 大カテゴリを取得
+			List <Category> bigCategoryList = categoryRepository.findByParentId(null);
 			
-			for (Category middleCategory : middleCategoryList) {
-				// 小カテゴリを取得
-				List <Category> smallCategoryList = categoryRepository.findByParentId(middleCategory.getId());
-				middleCategory.setChildCategories(smallCategoryList);
+			for (Category bigCategory: bigCategoryList) {
+				// 中カテゴリを取得
+				List <Category> middleCategoryList = categoryRepository.findByParentId(bigCategory.getId());
+				bigCategory.setChildCategories(middleCategoryList); 
+				
+				for (Category middleCategory : middleCategoryList) {
+					// 小カテゴリを取得
+					List <Category> smallCategoryList = categoryRepository.findByParentId(middleCategory.getId());
+					middleCategory.setChildCategories(smallCategoryList);
+				}
 			}
-		}
-		// 全カテゴリの情報が詰まった大カテゴリリストを返す
-		return bigCategoryList; 
+			session.setAttribute("categoryList", bigCategoryList);
+			return bigCategoryList;
+		} 
+		return categoryList;
 	}
 	
+	
+    /**
+     * @param categoryList カテゴリー群
+     * @param categoryName カテゴリ名
+     * @return
+     */
+    public Category getCategoryByName(List<Category> categoryList, String categoryName) {
+        for (Category category : categoryList) {
+        	// 完全一致した場合返す
+            if (category.getName().equals(categoryName)) {
+                return category;
+            }
+        }
+        return null;
+    }
 }

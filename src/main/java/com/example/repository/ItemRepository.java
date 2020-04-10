@@ -153,7 +153,7 @@ public class ItemRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE items SET name=:name , condition=:condition, ");
+		sql.append("UPDATE items SET name=:name , condition=:condition, category_id=:categoryId,");
 		sql.append("brand_id=:brandId, price=:price, shipping=:shipping, description=:description ");
 		sql.append("WHERE id=:id");
 		
