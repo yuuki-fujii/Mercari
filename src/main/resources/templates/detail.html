@@ -78,7 +78,24 @@
         </tbody>
       </table>
       <a type="button" class="btn btn-default" href="./edit.html" th:href="@{'/edit_item?id=' + ${item.id} +'&pageNumber=' + ${pageNumber}}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>
+      <hr>
+      <form id="deleteForm" th:action="@{'/delete_item?id=' + ${item.id}}" method="POST">
+      	<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
+      </form>
     </div>
   </div>
+  
+<script>
+	$("#button-delete").on("click",function(){
+		
+		if (window.confirm('削除してもよろしいですか?')) {
+			$('#deleteForm').submit();
+		} else {
+			
+		}
+	});
+	
+</script>
+
 </body>
 </html>
