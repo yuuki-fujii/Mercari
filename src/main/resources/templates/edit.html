@@ -12,10 +12,27 @@
     integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
   <link rel="stylesheet" href="./mercari.css" th:href="@{/css/mercari.css}"/>
   <!-- script -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>   
   <title>Rakus Items</title>
+  
+  <script>
+  $(function(){
+	  var tags = [ [(${brandListForAutocomplete})] ];
+	  
+	  $( "#brand" ).autocomplete({
+		    source: function(request,response){
+		    	var results = $.ui.autocomplete.filter(tags, request.term);
+		    	response(results.slice(0,20));
+		    }
+	  });
+  });
+  </script>
+  
 </head>
 <body>
   <!-- navbar -->
@@ -113,7 +130,8 @@
         <div class="form-group">
           <label for="brand" class="col-sm-2 control-label">brand</label>
           <div class="col-sm-8">
-            <input type="text" id="brand" class="form-control"/>
+            <input id="brand" type="text" class="form-control" name="brandName" th:field="*{brandName}"/>
+            <span th:errors="*{brandName}" style="color:red"></span>
           </div>
         </div>
         <!-- condition -->
