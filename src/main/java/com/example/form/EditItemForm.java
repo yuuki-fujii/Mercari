@@ -17,18 +17,16 @@ public class EditItemForm {
 	/** 商品名 */
 	@NotBlank(message = "商品名を入力してください")
 	private String name;
-	
 	/** 価格（double型） */
 	private double price;
-	// カテゴリー
-	
-	/** ブランド */
-	private String brand;
+	/** カテゴリ名 */
+	private String categoryName; 
+	/** ブランド名 */
+	private String brandName;
 	/** 状態 */
 	private Integer condition;
 	/** 説明 */
 	private String description;
-	
 	
 	public Integer getId() {
 		return id;
@@ -36,7 +34,6 @@ public class EditItemForm {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
 	public Integer getPageNumber() {
 		return pageNumber;
 	}
@@ -55,11 +52,17 @@ public class EditItemForm {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public String getBrand() {
-		return brand;
+	public String getCategoryName() {
+		return categoryName;
 	}
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 	public Integer getCondition() {
 		return condition;
@@ -74,4 +77,10 @@ public class EditItemForm {
 		this.description = description;
 	}
 	
+	@Override
+	public String toString() {
+		return "EditItemForm [id=" + id + ", pageNumber=" + pageNumber + ", name=" + name + ", price=" + price
+				+ ", categoryName=" + categoryName + ", brandName=" + brandName + ", condition=" + condition
+				+ ", description=" + description + "]";
+	}	
 }

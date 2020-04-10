@@ -106,7 +106,7 @@ public class ItemRepository {
 		
 		if (!"count".equals(mode)) {
 			Integer startNumber = calcStartNumber(form);
-			sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET "+ startNumber);
+			sql.append("ORDER BY i.price,i.name LIMIT 30 OFFSET " + startNumber);
 		}
 	
 		return sql;

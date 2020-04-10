@@ -15,7 +15,8 @@ import com.example.domain.Category;
 import com.example.domain.Item;
 import com.example.form.SearchForm;
 import com.example.service.SearchItemListService;
-import com.example.service.ShowCategoryService;
+import com.example.service.BrandService;
+import com.example.service.CategoryService;
 
 /**
  * 商品一覧画面を表示するコントローラー.
@@ -34,7 +35,10 @@ public class SearchItemListController {
 	private SearchItemListService showItemListService;
 	
 	@Autowired
-	private ShowCategoryService showCategoryService;
+	private CategoryService showCategoryService;
+	
+	@Autowired
+	private BrandService brandService;
 	
 	@ModelAttribute
 	public SearchForm setUpSearchForm() {
@@ -78,7 +82,7 @@ public class SearchItemListController {
 		model.addAttribute("nowPageNumber", form.getPageNumber());
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("itemList", showItemListService.searchItem(form));
-		
+		model.addAttribute("brandListForAutocomplete", brandService.getBrandListForAutocomplete());
 		// プルダウンを維持するための記述
 		setCategoryIds(form, getCategories());
 		return "list";

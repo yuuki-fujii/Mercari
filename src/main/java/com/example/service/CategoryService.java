@@ -15,7 +15,7 @@ import com.example.repository.CategoryRepository;
  *
  */
 @Service
-public class ShowCategoryService {
+public class CategoryService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;

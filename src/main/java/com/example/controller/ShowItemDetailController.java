@@ -21,6 +21,8 @@ public class ShowItemDetailController {
 		
 		Item item = showItemDetailService.getItem(id);
 			
+		System.out.println(item);
+		
 		model.addAttribute("item", item);
 		model.addAttribute("pageNumber", pageNumber);
 		

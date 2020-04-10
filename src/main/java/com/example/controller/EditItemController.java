@@ -34,11 +34,6 @@ public class EditItemController {
 	public EditItemForm setUpEditItemForm(Integer id) {
 		Item item = showItemDetailService.getItem(id);
 		EditItemForm form = new EditItemForm();
-		form.setName(item.getName());
-		form.setPrice(item.getPrice());
-		
-		form.setCondition(item.getCondition());
-		form.setDescription(item.getDescription());
 		
 		return form;
 	}
@@ -48,6 +43,8 @@ public class EditItemController {
 		
 		Item item = showItemDetailService.getItem(id);
 		
+		System.out.println(item);
+		
 		model.addAttribute("item", item);
 		model.addAttribute("pageNumber", pageNumber);
 		
@@ -55,7 +52,7 @@ public class EditItemController {
 	}
 	
 	@RequestMapping("/update")
-	public String editItem(Model model,@Validated EditItemForm form,BindingResult result) {
+	public String editItem(@Validated EditItemForm form, BindingResult result, Model model) {
 		
 		if (result.hasErrors()) {
 			return toEditItem(model, form.getId(), form.getPageNumber());
