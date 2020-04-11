@@ -133,11 +133,15 @@
         <thead>
           <tr>
             <th>name</th>
+            <th>edit</th>
+            <th>delete</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="brand : ${brandList}">
             <td class="brand-name" th:text="${brand.name}">Razer BlackWidow Chroma Keyboard</td>
+            <td><a type="button" class="btn btn-default" th:href="@{'/brand/edit?id=' + ${brand.id} +'&pageNumber=' + ${nowPageNumber}}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a></td>
+            <td><a type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;delete</a></td>
           </tr>
         </tbody>
       </table>

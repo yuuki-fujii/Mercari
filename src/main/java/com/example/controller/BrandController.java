@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Brand;
 import com.example.form.AddBrandForm;
+import com.example.form.EditBrandForm;
 import com.example.form.SearchBrandForm;
 import com.example.service.BrandService;
 
@@ -30,6 +31,11 @@ public class BrandController {
 	@ModelAttribute
 	public AddBrandForm setUpAddBrandForm() {
 		return new AddBrandForm();
+	}
+	
+	@ModelAttribute
+	public EditBrandForm setUpEditBrandForm () {
+		return new EditBrandForm();
 	}
 	
 	// 1ページあたりの最大データ数を定数化
@@ -56,12 +62,27 @@ public class BrandController {
 		return "search_brand";
 	}
 	
+	/**
+	 * ブランド追加画面に遷移する.
+	 * 
+	 * @param model リクエストスコープ 
+	 * @param pageNumber ページ数
+	 * @return ブランド追加画面
+	 */
 	@RequestMapping("/add")
 	public String toAddBrand(Model model,Integer pageNumber) {
 		model.addAttribute("pageNumber", pageNumber);
 		return "add_brand";
 	}
 	
+	
+	/**
+	 * @param form 商品追加フォーム
+	 * @param result　
+	 * @param model　リクエストスコープ
+	 * @return　insert成功時、ブランド検索画面
+	 * 　　　　　insert失敗時、商品追加画面
+	 */
 	@RequestMapping("/insert")
 	public String insert(@Validated AddBrandForm form, BindingResult result, Model model) {
 		
@@ -79,6 +100,43 @@ public class BrandController {
 		brandService.insert(brand);
 		return "redirect:/brand/search";
 	}
+	
+	/**
+	 * 商品編集画面に遷移.
+	 * 
+	 * @param model リクエストスコープ
+	 * @param pageNumber　ページ数
+	 * @return 商品編集画面
+	 */
+	@RequestMapping("/edit")
+	public String toEditBrand(EditBrandForm form ,Integer id, Integer pageNumber, Model model) {
+		Brand brand = brandService.findById(id);
+		form.setName(brand.getName());
+		model.addAttribute("brand", brand);
+		model.addAttribute("pageNumber", pageNumber);
+		return "edit_brand";
+	}
+	
+	@RequestMapping("/update")
+	public String update(@Validated EditBrandForm form,BindingResult result,Model model) {
+		List <Brand> brandList = brandService.findByName(form.getName());
+		if (brandList != null) {
+			result.rejectValue("name", null , "このブランド名は既に登録されています");
+		}
+		
+		if (result.hasErrors()) {
+			return toEditBrand(form,form.getId(),form.getPageNumber(),model);
+		}
+		
+		Brand brand = brandService.findById(form.getId());
+		brand.setName(form.getName());
+		brandService.update(brand);
+		
+		return "redirect:/brand/search";
+	}
+	
+	
+	
 	
 	/**
 	 * 総ページ数を求める.

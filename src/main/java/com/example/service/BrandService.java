@@ -35,6 +35,26 @@ public class BrandService {
 	
 	
 	/**
+	 * 主キー検索.
+	 * 
+	 * @param id　主キー
+	 * @return　ブランド
+	 */
+	public Brand findById(Integer id) {
+		return brandRepository.findById(id);
+	}
+	
+	
+	/**
+	 * ブランド情報を更新.
+	 * 
+	 * @param brand ブランド
+	 */
+	public void update(Brand brand) {
+		brandRepository.update(brand);
+	}
+	
+	/**
 	 * 全ブランド情報を取得する.
 	 * 
 	 * @return 全ブランド情報

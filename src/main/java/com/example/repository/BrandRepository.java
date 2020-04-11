@@ -42,6 +42,32 @@ public class BrandRepository {
 	
 	
 	/**
+	 * 主キー検索.
+	 * 
+	 * @param id 主キー
+	 * @return　ブランド
+	 */
+	public Brand findById(Integer id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,name FROM brand WHERE id=:id ");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		return template.queryForObject(sql.toString(), param, BRAND_ROW_MAPPER);
+	}
+	
+	
+	/**
+	 * ブランド名を変更する.
+	 * 
+	 * @param brand ブランド
+	 */
+	public void update(Brand brand) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(brand);
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE brand SET name = :name WHERE id=:id");
+		template.update(sql.toString(), param);
+	}
+	
+	/**
 	 * ページングのために30件分のブランドを取得する
 	 * 
 	 * @param form ブランド検索フォーム
