@@ -57,6 +57,17 @@
 	    if (currentPage == maxPage) {
 	      $('.next').addClass('disabled');
 	    }
+	    
+	    // 削除ボタンがクリックされた時の処理
+		$("#button-delete").on("click",function(){
+			
+			if (window.confirm('削除してもよろしいですか?')) {
+				$('#deleteForm').submit();
+			} else {
+				
+			}
+		});
+	    
   });
   </script>
   
@@ -141,7 +152,11 @@
           <tr th:each="brand : ${brandList}">
             <td class="brand-name" th:text="${brand.name}">Razer BlackWidow Chroma Keyboard</td>
             <td><a type="button" class="btn btn-default" th:href="@{'/brand/edit?id=' + ${brand.id} +'&pageNumber=' + ${nowPageNumber}}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a></td>
-            <td><a type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;delete</a></td>
+            <td>
+            	<form id="deleteForm" th:action="@{'/brand/delete?id=' + ${brand.id}}" method="POST">
+      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
+     			</form>
+            </td>
           </tr>
         </tbody>
       </table>

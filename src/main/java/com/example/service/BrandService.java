@@ -54,6 +54,17 @@ public class BrandService {
 		brandRepository.update(brand);
 	}
 	
+	
+	/**
+	 * ブランド情報を削除.
+	 * 
+	 * @param id 主キー
+	 */
+	public void deleteById(Integer id) {
+		brandRepository.deleteById(id);
+	}
+	
+	
 	/**
 	 * 全ブランド情報を取得する.
 	 * 

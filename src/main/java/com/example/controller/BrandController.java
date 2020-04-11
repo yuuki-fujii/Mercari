@@ -117,6 +117,15 @@ public class BrandController {
 		return "edit_brand";
 	}
 	
+	/**
+	 * ブランド情報を更新する.
+	 * 
+	 * @param form ブランド編集フォーム
+	 * @param result
+	 * @param model リクエストスコープ 
+	 * @return insert成功時、ブランド検索画面
+	 * 　　　　　insert失敗時、商品編集画面
+	 */
 	@RequestMapping("/update")
 	public String update(@Validated EditBrandForm form,BindingResult result,Model model) {
 		List <Brand> brandList = brandService.findByName(form.getName());
@@ -135,6 +144,20 @@ public class BrandController {
 		return "redirect:/brand/search";
 	}
 	
+	
+	/**
+	 * ブランド情報を削除する
+	 * 
+	 * @param id 主キー
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	public String delete(Integer id) {
+		System.out.println(id);
+		
+		brandService.deleteById(id);
+		return "redirect:/brand/search";
+	}
 	
 	
 	

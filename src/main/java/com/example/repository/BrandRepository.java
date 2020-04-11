@@ -67,6 +67,22 @@ public class BrandRepository {
 		template.update(sql.toString(), param);
 	}
 	
+	
+	/**
+	 * ブランドを削除し、該当するブランドを持つitemsのbrand_idをnullにする
+	 * 
+	 * 
+	 * @param id 主キー
+	 */
+	public void deleteById(Integer id){
+		StringBuilder sql = new StringBuilder();
+		sql.append("WITH deleted AS (DELETE FROM brand WHERE id = :id RETURNING id) ");
+		sql.append("UPDATE items SET brand_id = null ");
+		sql.append("WHERE brand_id IN (SELECT id FROM deleted)");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		template.update(sql.toString(), param);
+	}
+	
 	/**
 	 * ページングのために30件分のブランドを取得する
 	 * 
