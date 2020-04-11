@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
@@ -113,6 +115,22 @@ public class BrandRepository {
 		} 
 		return brandList;
 	}
+	
+	
+	/**
+	 * 新規ブランドを追加する.
+	 * 
+	 * @param brand ブランド
+	 */
+	public void insert(Brand brand) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(brand);
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO brand (name) ");
+		sql.append("VALUES (:name) ");
+		template.update(sql.toString(), param);
+	}
+	
+	
 	
 	/**
 	 * 現在のページでの開始番号 - 1 を求める.

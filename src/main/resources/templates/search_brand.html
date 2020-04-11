@@ -87,7 +87,7 @@
   <div id="main" class="container-fluid">
     <!-- add link -->
     <div>
-      <a class="btn btn-default" href="#"><i class="fa fa-plus-square-o"></i> Add New Brand</a>
+      <a class="btn btn-default" href="#" th:href="@{'/brand/add?pageNumber=' + ${nowPageNumber}}"><i class="fa fa-plus-square-o"></i> Add New Brand</a>
     </div>
 
     <!-- ブランド検索フォーム -->
@@ -137,7 +137,7 @@
         </thead>
         <tbody>
           <tr th:each="brand : ${brandList}">
-            <td class="brand-name"><a href="#" th:text="${brand.name}">Razer BlackWidow Chroma Keyboard</a></td>
+            <td class="brand-name" th:text="${brand.name}">Razer BlackWidow Chroma Keyboard</td>
           </tr>
         </tbody>
       </table>
@@ -147,8 +147,8 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous" th:unless="${nowPageNumber} == 1"><a href="#" ><span class="notTwiceBtn">&larr; prev</span></a></li>
-          <li class="next" th:unless="${nowPageNumber} == ${countOfPage}"><a href="#"><span class="notTwiceBtn">next &rarr;</span></a></li>
+          <li class="previous"><a href="#" ><span class="notTwiceBtn">&larr; prev</span></a></li>
+          <li class="next"><a href="#"><span class="notTwiceBtn">next &rarr;</span></a></li>
         </ul>
       </nav>
       

@@ -63,6 +63,16 @@ public class BrandService {
 		return brandRepository.countBrand(form);
 	}
 	
+	
+	/**
+	 * ブランドを追加する.
+	 * 
+	 * @param brand ブランド
+	 */
+	public void insert(Brand brand) {
+		brandRepository.insert(brand);
+	}
+	
 	/**
 	 * オートコンプリート用にJavaScriptの配列の中身を文字列で作る.
 	 * 
