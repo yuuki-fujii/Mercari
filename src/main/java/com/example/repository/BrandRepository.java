@@ -90,9 +90,9 @@ public class BrandRepository {
 	 * @return　30件のブランド情報
 	 */
 	public List<Brand> findlimited(SearchBrandForm form){ 
-		MapSqlParameterSource param = new MapSqlParameterSource();
-		StringBuilder sql = createSql(form, param, null);
-		return template.query(sql.toString(), BRAND_ROW_MAPPER);
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		StringBuilder sql = createSql(form, params, null);
+		return template.query(sql.toString(),params,BRAND_ROW_MAPPER);
 	}
 	
 	
@@ -116,24 +116,25 @@ public class BrandRepository {
 	 * @param mode ブランドを検索するか、データ数を検索するか 
 	 * @return SQl
 	 */
-	private StringBuilder createSql(SearchBrandForm form, MapSqlParameterSource param, String mode) {
+	private StringBuilder createSql(SearchBrandForm form, MapSqlParameterSource params, String mode) {
 		StringBuilder sql = new StringBuilder();
 		
 		if ("count".equals(mode)) {
 			sql.append("SELECT count(*) ");
 		} else {
-			sql.append("SELECT b.id,b.name ");
+			sql.append("SELECT id,name ");
 		}
-		sql.append("FROM brand b WHERE 1 = 1 ");
+		sql.append("FROM brand WHERE 1 = 1 ");
 		
 		// ブランド名　あいまい検索
 		if (!StringUtils.isEmpty(form.getName())) {
-			sql.append("AND b.name LIKE " + "'%" + form.getName() + "%'"); // セキュリティー上良くないが、addValueできないので直接書いてる
+			sql.append("AND name LIKE :name "); 
+			params.addValue("name", "%" + form.getName() + "%");
 		}
 		
 		if (!"count".equals(mode)) {
 			Integer startNumber = calcStartNumber(form);
-			sql.append("ORDER BY b.name LIMIT 30 OFFSET " + startNumber);
+			sql.append("ORDER BY name LIMIT 30 OFFSET " + startNumber);
 		}
 		return sql;
 	}

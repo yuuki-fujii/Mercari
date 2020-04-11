@@ -55,6 +55,20 @@ public class Category {
 	public void setChildCategories(List<Category> childCategories) {
 		this.childCategories = childCategories;
 	}
+	// プロパティ
+    public String getBigCategoryName() {
+        return nameAll != null ? nameAll.split("/")[0] : "";
+    }
+
+    public String getMiddleCategoryName() {
+        return nameAll != null ? nameAll.split("/")[1] : "";
+    }
+
+    public String getSmallCategoryName() {
+        return nameAll != null ? nameAll.split("/")[2] : "";
+    }
+	
+	
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", parentId=" + parentId + ", name=" + name + ", nameAll=" + nameAll

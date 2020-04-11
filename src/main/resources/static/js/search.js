@@ -107,7 +107,6 @@ $(function(){
 				}
 			}
 		}
-		console.log(categoryName);
 		return categoryName;
 	}
 	

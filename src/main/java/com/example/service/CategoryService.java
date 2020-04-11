@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.domain.Category;
+import com.example.form.SearchCategoryForm;
 import com.example.repository.CategoryRepository;
 
 /**
@@ -53,6 +54,27 @@ public class CategoryService {
 			return bigCategoryList;
 		} 
 		return categoryList;
+	}
+	
+	
+	/**
+	 * 全てのname_allを取得する.
+	 * 
+	 * @return  全小カテゴリ
+	 */
+	public List <Category> getAllSmallCategory(SearchCategoryForm form){
+		return categoryRepository.findAllSmallCategory(form);
+	}
+	
+	
+	/**
+	 * name_allを持つカテゴリのデータ数を返す.
+	 * 
+	 * @param form カテゴリ検索フォーム　
+	 * @return　name_allを持つカテゴリのデータ数
+	 */
+	public Integer countNameAll(SearchCategoryForm form) {
+		return categoryRepository.countNameAll(form);
 	}
 	
 	
