@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.Item;
-import com.example.form.SearchForm;
+import com.example.form.SearchItemForm;
 import com.example.repository.ItemRepository;
 
 @Service
@@ -19,12 +19,12 @@ public class SearchItemListService {
 	
 	
 
-	public List<Item> searchItem(SearchForm form){
+	public List<Item> searchItem(SearchItemForm form){
 		return itemRepository.findBySerachForm(form);
 	}
 	
 	
-	public Integer countData(SearchForm form) {
+	public Integer countData(SearchItemForm form) {
 		return itemRepository.countData(form);
 	}
 	

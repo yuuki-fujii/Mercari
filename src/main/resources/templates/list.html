@@ -32,7 +32,6 @@
 	  });
   });
   </script>
-  
 </head>
 <body>
   <!-- navbar -->
@@ -48,7 +47,9 @@
     <div id="navbar" class="collapse navbar-collapse">
       <div>
         <ul class="nav navbar-nav navbar-right">
+          <li><a th:href="@{/brand/search}">Brand</a></li>
           <li><a id="logout" href="./login.html">Logout <i class="fa fa-power-off"></i></a></li>
+          
         </ul>
         <p class="navbar-text navbar-right">
           <span id="loginName">user: userName</span>
@@ -65,7 +66,7 @@
 
     <!-- 検索フォーム -->
     <div id="forms">
-      <form id="searchForm" method="POST" th:action="@{/item/search}" class="form-inline" role="form" th:object="${searchForm}" >
+      <form id="searchForm" method="POST" th:action="@{/item/search}" class="form-inline" role="form" th:object="${searchItemForm}" >
         <div class="form-group">
           <input type="text" class="form-control"  placeholder="item name" name="itemName" th:field="*{itemName}"/>
         </div>

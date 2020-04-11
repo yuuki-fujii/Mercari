@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.domain.Category;
 import com.example.domain.Item;
-import com.example.form.SearchForm;
+import com.example.form.SearchItemForm;
 import com.example.service.BrandService;
 import com.example.service.CategoryService;
 import com.example.service.SearchItemListService;
@@ -36,8 +36,8 @@ public class SearchItemListController {
 	private BrandService brandService;
 	
 	@ModelAttribute
-	public SearchForm setUpSearchForm() {
-		return new SearchForm();
+	public SearchItemForm setUpSearchForm() {
+		return new SearchItemForm();
 	}
 	
 	// 1ページあたりの最大データ数を定数化
@@ -52,7 +52,7 @@ public class SearchItemListController {
 	 * @return 検索結果
 	 */
 	@RequestMapping("/search")
-	public String search(SearchForm form, Model model) {
+	public String search(SearchItemForm form, Model model) {
 
 		if (form.getPageNumber() == null) {
 			form.setPageNumber(1);
@@ -102,7 +102,7 @@ public class SearchItemListController {
      * @param form 商品検索フォーム
      * @param categoryList
      */
-    public void setCategoryIds(SearchForm form, List<Category> categoryList) {
+    public void setCategoryIds(SearchItemForm form, List<Category> categoryList) {
         // 一旦全てクリアーする
         form.setBigCategoryId(null);
         form.setMiddleCategoryId(null);

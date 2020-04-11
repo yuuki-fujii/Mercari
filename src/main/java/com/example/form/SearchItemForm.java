@@ -6,7 +6,7 @@ package com.example.form;
  * @author yuuki
  *
  */
-public class SearchForm {
+public class SearchItemForm {
 	
 	/** 商品名 */
 	private String itemName;

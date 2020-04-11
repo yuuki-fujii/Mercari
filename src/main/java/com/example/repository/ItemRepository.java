@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import com.example.domain.Item;
-import com.example.form.SearchForm;
+import com.example.form.SearchItemForm;
 
 
 /**
@@ -50,7 +50,7 @@ public class ItemRepository {
 	 * @param form 商品検索フォーム
 	 * @return 該当する商品情報
 	 */
-	public List <Item> findBySerachForm(SearchForm form){
+	public List <Item> findBySerachForm(SearchItemForm form){
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		StringBuilder sql = createSql(form, params, null);
 		return template.query(sql.toString(), params,ITEM_ROW_MAPPER);	
@@ -63,7 +63,7 @@ public class ItemRepository {
 	 * @param form 商品検索フォーム 
 	 * @return 該当した商品の数
 	 */
-	public Integer countData(SearchForm form) {
+	public Integer countData(SearchItemForm form) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
         StringBuilder sql = createSql(form, params, "count");
         return template.queryForObject(sql.toString(), params, Integer.class);
@@ -79,7 +79,7 @@ public class ItemRepository {
 	 * @param mode
 	 * @return
 	 */
-	private StringBuilder createSql(SearchForm form,MapSqlParameterSource params,String mode) {
+	private StringBuilder createSql(SearchItemForm form,MapSqlParameterSource params,String mode) {
 		
 		StringBuilder sql = new StringBuilder();
 		
@@ -125,7 +125,7 @@ public class ItemRepository {
 	 * @param form 商品検索フォーム
 	 * @return 現在のページでの開始番号 - 1 (OFFSETで使う数字)
 	 */
-	private Integer calcStartNumber(SearchForm form) {
+	private Integer calcStartNumber(SearchItemForm form) {
 		Integer pageNumber = form.getPageNumber();
 		Integer startNumber = 30 * (pageNumber - 1);
 		return startNumber;
