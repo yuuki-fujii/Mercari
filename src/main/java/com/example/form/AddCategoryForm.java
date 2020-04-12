@@ -22,6 +22,25 @@ public class AddCategoryForm {
 	
 	/** 全カテゴリ名（小カテゴリで使用） */
 	private String nameAll;
+	
+	private Integer bigCategoryId;
+	private Integer middleCategoryId;
+	
+	public Integer getBigCategoryId() {
+		return bigCategoryId;
+	}
+
+	public void setBigCategoryId(Integer bigCategoryId) {
+		this.bigCategoryId = bigCategoryId;
+	}
+
+	public Integer getMiddleCategoryId() {
+		return middleCategoryId;
+	}
+
+	public void setMiddleCategoryId(Integer middleCategoryId) {
+		this.middleCategoryId = middleCategoryId;
+	}
 
 	public Integer getPageNumber() {
 		return pageNumber;
@@ -58,7 +77,7 @@ public class AddCategoryForm {
 	@Override
 	public String toString() {
 		return "AddCategoryForm [pageNumber=" + pageNumber + ", name=" + name + ", parentId=" + parentId + ", nameAll="
-				+ nameAll + "]";
+				+ nameAll + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId=" + middleCategoryId + "]";
 	}
 	
 }

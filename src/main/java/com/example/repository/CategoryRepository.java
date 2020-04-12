@@ -139,13 +139,14 @@ public class CategoryRepository {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,parent_id,name,name_all FROM category ");
 		if (parentId == null) { // 大カテゴリの場合
-			sql.append("WHERE parent_id IS NULL AND name = :name"); 
-			params.addValue("name", name);
+			sql.append("WHERE parent_id IS NULL "); 
 		} else if (parentId != null && nameAll == null) { // 中カテゴリの場合
 			sql.append("WHERE parent_id IS NOT NULL AND name_all IS NULL ");
-			sql.append("AND name = :name");
-			params.addValue("name", name);
+		} else if (parentId != null && nameAll != null) { // 小カテゴリの場合
+			sql.append("WHERE parent_id IS NOT NULL AND name_all IS NOT NULL ");
 		}
+		sql.append("AND name = :name");
+		params.addValue("name", name);
 		return sql;
 	}
 	
@@ -176,6 +177,8 @@ public class CategoryRepository {
 			sql.append("(name) VALUES (:name) ");
 		} else if (category.getParentId() != null && category.getNameAll() == null) {
 			sql.append("(name,parent_id) VALUES (:name,:parentId)");
+		} else if (category.getParentId() != null && category.getNameAll() != null) {
+			sql.append("(name,parent_id,name_all) VALUES (:name,:parentId,:nameAll)");
 		}
 		return sql;
 	}
