@@ -180,6 +180,14 @@
 		if (currentPage == maxPage) {
 	  		$('.next').addClass('disabled');
 		}
+		
+		// 編集ボタンが押された時の処理
+		$('#button-edit').on('click',function(){
+			$('#editPageForm [name=categoryName]').val($(this).data('category'));
+		    $('#editPageForm').submit();
+		});
+		
+		
 	});
 </script>
 
@@ -273,9 +281,11 @@
           <tr th:each="category :${categoryList}">
             <td><a class="categoryLink" th:data-category="${category.bigCategoryName}" th:text="${category.bigCategoryName}">Electronics</a></td>
             <td>
-				<form method="POST">
-      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
-     			</form>            
+            	<form id="editPageForm" method="POST" th:action="@{/edit_category/big}">
+            		<input type="hidden" name="categoryName">
+            		<input type="hidden" name="pageNumber" th:value="${nowPageNumber}">
+      				<button id="button-edit" type="button" class="btn btn-default" th:data-category="${category.bigCategoryName}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
+     			</form>
             </td>
             <td>
             	<form id="deleteForm" method="POST">
@@ -283,21 +293,21 @@
      			</form>		
             </td>
             <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName}" th:text="${category.middleCategoryName}">Computers &amp; Tablets</a></td>
-                <td>
-				<form method="POST">
-      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
-     			</form>            
-            </td>
+            <td>
+            	<form id="editForm" method="POST">
+      				<button id="button-edit" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
+     			</form>
+            </td>   
             <td>
             	<form id="deleteForm" method="POST">
       				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
      			</form>		
             </td>
             <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName} + '/' + ${category.smallCategoryName}" th:text="${category.smallCategoryName}">Components &amp; Parts</a></td>
-                <td>
-				<form method="POST">
-      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
-     			</form>            
+            <td>
+            	<form id="editForm" method="POST">
+      				<button id="button-edit" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
+     			</form>
             </td>
             <td>
             	<form id="deleteForm" method="POST">

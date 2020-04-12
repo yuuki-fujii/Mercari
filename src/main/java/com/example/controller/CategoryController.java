@@ -13,7 +13,7 @@ import com.example.form.SearchCategoryForm;
 import com.example.service.CategoryService;
 
 /**
- * カテゴリ一覧検索、追加、編集、削除を行うコントローラ.
+ * カテゴリ一覧検索を行うコントローラ.
  * 
  * @author yuuki
  *
