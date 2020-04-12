@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
@@ -103,6 +105,75 @@ public class CategoryRepository {
 		}
 		return sql;
 	}
+	
+	
+	
+	/**
+	 * 大中小それぞれのカテゴリ名で検索する.
+	 * 
+	 * @param name カテゴリ名
+	 * @param parentId　親カテゴリid
+	 * @param nameAll　全カテゴリ名
+	 * @return 　カテゴリリスト
+	 */
+	public List<Category> judgeExistCategory(String name, Integer parentId, String nameAll){ 
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		StringBuilder sql = createSqlForFindByName(name, parentId, nameAll, params);
+		List<Category> categoryList = template.query(sql.toString(), params ,CATEGORY_ROW_MAPPER);
+		if (categoryList.size() == 0) {
+			return null;
+		} else {
+			return categoryList;
+		}
+	}
+	
+	/**
+	 * 大中小のカテゴリ名が既に存在するかどうかを検索するSQL文を発行する.
+	 * 
+	 * @param name カテゴリ名
+	 * @param parentId 親カテゴリid
+	 * @param nameAll 全カテゴリ名
+	 * @return SQL文
+	 */
+	private StringBuilder createSqlForFindByName(String name, Integer parentId, String nameAll, MapSqlParameterSource params) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id,parent_id,name,name_all FROM category ");
+		if (parentId == null) { 
+			sql.append("WHERE parent_id IS NULL AND name = :name"); // 大カテゴリの場合
+			params.addValue("name", name);
+		}
+		return sql;
+	}
+	
+	
+	/**
+	 * 大中小カテゴリをインサートする.
+	 * 
+	 * @param category カテゴリ
+	 */
+	public void insertCategory(Category category) {
+		SqlParameterSource params = new BeanPropertySqlParameterSource(category);;
+		StringBuilder sql = createSqlForInsert(category);
+		template.update(sql.toString(), params);
+	}
+	
+	
+	/**
+	 * 大中小カテゴリによって異なるSQL分を発行するメソッド.
+	 * 
+	 * @param category カテゴリ
+	 * @param params
+	 * @return SQL文
+	 */
+	private StringBuilder createSqlForInsert(Category category) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO category ");
+		if (category.getParentId() == null) {
+			sql.append("(name) VALUES (:name) ");
+		}
+		return sql;
+	}
+	
 	
 	/**
 	 * 現在のページでの開始番号 - 1 を求める.

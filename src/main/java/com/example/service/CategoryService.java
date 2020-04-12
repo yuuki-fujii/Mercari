@@ -58,6 +58,27 @@ public class CategoryService {
 	
 	
 	/**
+	 * 大中小それぞれのカテゴリを取得する.
+	 * 
+	 * @param name カテゴリ名
+	 * @param parentId　親カテゴリid
+	 * @param nameAll　全カテゴリ名
+	 * @return 　カテゴリリスト
+	 */
+	public List<Category> judgeExistCategory(String name, Integer parentId, String nameAll){
+		return categoryRepository.judgeExistCategory(name, parentId, nameAll);
+	}
+	
+	/**
+	 * カテゴリをインサートする.
+	 * 
+	 * @param category カテゴリ
+	 */
+	public void insertCategory(Category category) {
+		categoryRepository.insertCategory(category);
+	}
+	
+	/**
 	 * 全てのname_allを取得する.
 	 * 
 	 * @return  全小カテゴリ

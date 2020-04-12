@@ -137,12 +137,14 @@
 		// nextリンククリック時のイベント処理設定
 		$('.next').on('click', function() {
 	  		$('#searchCategoryForm [name=pageNumber]').val(currentPage + 1);
+	  		$('#searchCategoryForm [name=categoryName]').val(createCategoryName());
 	  		$('#searchCategoryForm').submit();
 		});
 
 		// previousリンククリック時のイベント処理設定
 		$('.previous').on('click', function() {
 	  		$('#searchCategoryForm [name=pageNumber]').val(currentPage - 1);
+	  		$('#searchCategoryForm [name=categoryName]').val(createCategoryName());
 	  		$('#searchCategoryForm').submit();
 		});
 		
@@ -208,11 +210,12 @@
   </nav>
 
   <div id="main" class="container-fluid">
-    <!-- add link -->
-    <div>
-      <a class="btn btn-default" href="#"><i class="fa fa-plus-square-o"></i> Add New Category</a>
+  	<div>
+   		<a class="btn btn-default" th:href="@{'/add_category/big?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New BigCategory</a>&nbsp;
+   		<a class="btn btn-default" th:href="@{'/add_category/middle?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New MiddleCategory</a>&nbsp;
+   		<a class="btn btn-default" th:href="@{'/add_category/small?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New SmallCategory</a>
     </div>
-
+  
     <!-- カテゴリ検索フォーム -->
     <div id="forms">
       <form id="searchCategoryForm" method="POST" class="form-inline" role="form" th:object="${searchCategoryForm}">
@@ -255,16 +258,52 @@
       <table id="item-table" class="table table-hover table-condensed">
         <thead>
           <tr>
-            <th>category</th>
+            <th>bigCategory</th>
+            <th>edit</th>
+            <th>delete</th>
+            <th>middleCategory</th>
+            <th>edit</th>
+            <th>delete</th>
+            <th>smallCategory</th>
+            <th>edit</th>
+            <th>delete</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="category :${categoryList}">
+            <td><a class="categoryLink" th:data-category="${category.bigCategoryName}" th:text="${category.bigCategoryName}">Electronics</a></td>
             <td>
-            	<a class="categoryLink" th:data-category="${category.bigCategoryName}" th:text="${category.bigCategoryName}">Electronics</a> /
-                <a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName}" th:text="${category.middleCategoryName}">Computers &amp; Tablets</a> /
-                <a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName} + '/' + ${category.smallCategoryName}" th:text="${category.smallCategoryName}">Components &amp; Parts</a>
+				<form method="POST">
+      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
+     			</form>            
             </td>
+            <td>
+            	<form id="deleteForm" method="POST">
+      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
+     			</form>		
+            </td>
+            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName}" th:text="${category.middleCategoryName}">Computers &amp; Tablets</a></td>
+                <td>
+				<form method="POST">
+      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
+     			</form>            
+            </td>
+            <td>
+            	<form id="deleteForm" method="POST">
+      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
+     			</form>		
+            </td>
+            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName} + '/' + ${category.smallCategoryName}" th:text="${category.smallCategoryName}">Components &amp; Parts</a></td>
+                <td>
+				<form method="POST">
+      				<button type="submit" class="btn btn-default">&nbsp;edit</button>
+     			</form>            
+            </td>
+            <td>
+            	<form id="deleteForm" method="POST">
+      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
+     			</form>		
+            </td>  
           </tr>
         </tbody>
       </table>
