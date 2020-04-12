@@ -48,15 +48,22 @@
     <h2>Add</h2>
 
     <!-- add form -->
-    <form method="POST" class="form-horizontal">
+    <form method="POST" th:action="@{/add_category/middle_insert}" class="form-horizontal" th:object="${addCategoryForm}">
       <!-- pageNumber -->
       <input type="hidden" name="pageNumber" th:value="${pageNumber}">
+     	
+     <div class="form-group">
+     	<label for="inputName" class="col-sm-2 control-label">bigCategory</label>
+     	<select name="parentId">
+      		<option th:each="category :${categoryList}" th:text="${category.name}" th:value="${category.id}" th:field="*{parentId}"></option>
+      </select>
+     </div>
       <!-- name -->
       <div class="form-group">
         <label for="inputName" class="col-sm-2 control-label">name</label>
         <div class="col-sm-8">
-          <input type="text" class="form-control" id="inputName"/>
-          <span style="color:red">error:may not be empty</span>
+          <input type="text" class="form-control" id="inputName" name="name" th:field="*{name}"/>
+          <span style="color:red" th:errors="*{name}">error:may not be empty</span>
         </div>
       </div>
       

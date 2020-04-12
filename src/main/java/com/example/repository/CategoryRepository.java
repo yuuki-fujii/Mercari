@@ -138,8 +138,12 @@ public class CategoryRepository {
 	private StringBuilder createSqlForFindByName(String name, Integer parentId, String nameAll, MapSqlParameterSource params) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id,parent_id,name,name_all FROM category ");
-		if (parentId == null) { 
-			sql.append("WHERE parent_id IS NULL AND name = :name"); // 大カテゴリの場合
+		if (parentId == null) { // 大カテゴリの場合
+			sql.append("WHERE parent_id IS NULL AND name = :name"); 
+			params.addValue("name", name);
+		} else if (parentId != null && nameAll == null) { // 中カテゴリの場合
+			sql.append("WHERE parent_id IS NOT NULL AND name_all IS NULL ");
+			sql.append("AND name = :name");
 			params.addValue("name", name);
 		}
 		return sql;
@@ -170,6 +174,8 @@ public class CategoryRepository {
 		sql.append("INSERT INTO category ");
 		if (category.getParentId() == null) {
 			sql.append("(name) VALUES (:name) ");
+		} else if (category.getParentId() != null && category.getNameAll() == null) {
+			sql.append("(name,parent_id) VALUES (:name,:parentId)");
 		}
 		return sql;
 	}
