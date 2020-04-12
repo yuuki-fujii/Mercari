@@ -218,12 +218,16 @@
   </nav>
 
   <div id="main" class="container-fluid">
-  	<div>
+  	<div class="form-group">
    		<a class="btn btn-default" th:href="@{'/add_category/big?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New BigCategory</a>&nbsp;
    		<a class="btn btn-default" th:href="@{'/add_category/middle?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New MiddleCategory</a>&nbsp;
    		<a class="btn btn-default" th:href="@{'/add_category/small?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New SmallCategory</a>
     </div>
-  
+  	<div class="form-group">
+   		<a class="btn btn-default" th:href="@{/edit_category/big}" ><i class="fa fa-plus-square-o"></i> Edit/Delete BigCategory</a>&nbsp;
+   		<a class="btn btn-default" ><i class="fa fa-plus-square-o"></i> Edit/Delete MiddleCategory</a>&nbsp;
+   		<a class="btn btn-default" ><i class="fa fa-plus-square-o"></i> Edit/Delete SmallCategory</a>
+    </div>
     <!-- カテゴリ検索フォーム -->
     <div id="forms">
       <form id="searchCategoryForm" method="POST" class="form-inline" role="form" th:object="${searchCategoryForm}">
@@ -267,53 +271,15 @@
         <thead>
           <tr>
             <th>bigCategory</th>
-            <th>edit</th>
-            <th>delete</th>
             <th>middleCategory</th>
-            <th>edit</th>
-            <th>delete</th>
             <th>smallCategory</th>
-            <th>edit</th>
-            <th>delete</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="category :${categoryList}">
             <td><a class="categoryLink" th:data-category="${category.bigCategoryName}" th:text="${category.bigCategoryName}">Electronics</a></td>
-            <td>
-            	<form id="editPageForm" method="POST" th:action="@{/edit_category/big}">
-            		<input type="hidden" name="categoryName">
-            		<input type="hidden" name="pageNumber" th:value="${nowPageNumber}">
-      				<button id="button-edit" type="button" class="btn btn-default" th:data-category="${category.bigCategoryName}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
-     			</form>
-            </td>
-            <td>
-            	<form id="deleteForm" method="POST">
-      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
-     			</form>		
-            </td>
-            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName}" th:text="${category.middleCategoryName}">Computers &amp; Tablets</a></td>
-            <td>
-            	<form id="editForm" method="POST">
-      				<button id="button-edit" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
-     			</form>
-            </td>   
-            <td>
-            	<form id="deleteForm" method="POST">
-      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
-     			</form>		
-            </td>
-            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName} + '/' + ${category.smallCategoryName}" th:text="${category.smallCategoryName}">Components &amp; Parts</a></td>
-            <td>
-            	<form id="editForm" method="POST">
-      				<button id="button-edit" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</button>
-     			</form>
-            </td>
-            <td>
-            	<form id="deleteForm" method="POST">
-      				<button id="button-delete" type="button" class="btn btn-default">&nbsp;delete</button>
-     			</form>		
-            </td>  
+            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName}" th:text="${category.middleCategoryName}">Computers &amp; Tablets</a></td> 
+            <td><a class="categoryLink" th:data-category="${category.bigCategoryName} + '/' + ${category.middleCategoryName} + '/' + ${category.smallCategoryName}" th:text="${category.smallCategoryName}">Components &amp; Parts</a></td>  
           </tr>
         </tbody>
       </table>

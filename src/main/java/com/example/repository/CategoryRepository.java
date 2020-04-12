@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import com.example.domain.Category;
+import com.example.form.EditCategoryForm;
 import com.example.form.SearchCategoryForm;
 
 /**
@@ -66,7 +67,7 @@ public class CategoryRepository {
 	 */
 	public List <Category> findAllSmallCategory(SearchCategoryForm form){
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		StringBuilder sql = createSql(form, params, null);
+		StringBuilder sql = createSqlForSearch(form, params, null);
 		return template.query(sql.toString(),params,CATEGORY_ROW_MAPPER);
 	}
 	
@@ -78,12 +79,12 @@ public class CategoryRepository {
 	 */
 	public Integer countNameAll(SearchCategoryForm form) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		StringBuilder sql = createSql(form, params, "count");
+		StringBuilder sql = createSqlForSearch(form, params, "count");
 		return template.queryForObject(sql.toString(), params, Integer.class);
 	}
 	
 	
-	private StringBuilder createSql(SearchCategoryForm form, MapSqlParameterSource params, String mode) {
+	private StringBuilder createSqlForSearch(SearchCategoryForm form, MapSqlParameterSource params, String mode) {
 		StringBuilder sql = new StringBuilder();
 		
 		if ("count".equals(mode)) {
@@ -183,6 +184,34 @@ public class CategoryRepository {
 		return sql;
 	}
 	
+	
+	/**
+	 * 大中小カテゴリを更新する.
+	 * 
+	 * @param category カテゴリ
+	 */
+	public void updateCategory(EditCategoryForm form) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		StringBuilder sql = createSqlForUpdate(form,params);
+		template.update(sql.toString(), params);
+	}
+	
+	
+	private StringBuilder createSqlForUpdate(EditCategoryForm form, MapSqlParameterSource params) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE category SET name_all = replace(name_all, '" + form.getBeforeName() + "', :name)");
+		sql.append("WHERE id IN ");
+		sql.append("(SELECT small.id FROM category big INNER JOIN category middle ON big.id = middle.parent_id ");
+		sql.append("INNER JOIN category small ON middle.id = small.parent_id WHERE big.id = :id);");
+		
+		sql.append("UPDATE category SET name = :name WHERE id = :id ");
+		params.addValue("id", form.getBigCategoryId()).addValue("name", form.getAfterName());
+		return sql;
+	}
+	
+	
+
+			
 	
 	/**
 	 * 現在のページでの開始番号 - 1 を求める.

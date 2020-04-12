@@ -13,9 +13,13 @@ public class EditCategoryForm {
 	/** ページ数 */
 	private Integer pageNumber;
 	
-	/** カテゴリ名 */
+	
+	/** 変更したい名前 */
 	@NotBlank(message = "カテゴリ名を入力してください")
-	private String name;
+	private String afterName;
+	// 元々の名前
+	private String beforeName;
+	
 	
 	/** 親カテゴリid (中、小カテゴリで使用) */
 	private Integer parentId;
@@ -29,6 +33,14 @@ public class EditCategoryForm {
 	private Integer middleCategoryId;
 	private Integer smallCategoryId;
 	
+	
+	
+	public String getBeforeName() {
+		return beforeName;
+	}
+	public void setBeforeName(String beforeName) {
+		this.beforeName = beforeName;
+	}
 	public String getCategoryName() {
 		return categoryName;
 	}
@@ -41,11 +53,12 @@ public class EditCategoryForm {
 	public void setPageNumber(Integer pageNumber) {
 		this.pageNumber = pageNumber;
 	}
-	public String getName() {
-		return name;
+	
+	public String getAfterName() {
+		return afterName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setAfterName(String afterName) {
+		this.afterName = afterName;
 	}
 	public Integer getParentId() {
 		return parentId;
@@ -79,9 +92,9 @@ public class EditCategoryForm {
 	}
 	@Override
 	public String toString() {
-		return "EditCategoryForm [pageNumber=" + pageNumber + ", name=" + name + ", parentId=" + parentId
-				+ ", categoryName=" + categoryName + ", nameAll=" + nameAll + ", bigCategoryId=" + bigCategoryId
-				+ ", middleCategoryId=" + middleCategoryId + ", smallCategoryId=" + smallCategoryId + "]";
+		return "EditCategoryForm [pageNumber=" + pageNumber + ", afterName=" + afterName + ", beforeName=" + beforeName
+				+ ", parentId=" + parentId + ", categoryName=" + categoryName + ", nameAll=" + nameAll
+				+ ", bigCategoryId=" + bigCategoryId + ", middleCategoryId=" + middleCategoryId + ", smallCategoryId="
+				+ smallCategoryId + "]";
 	}
-	
 }
