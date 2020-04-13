@@ -202,16 +202,24 @@ public class CategoryRepository {
 		sql.append("UPDATE category SET name_all = replace(name_all, '" + form.getBeforeName() + "', :name)");
 		sql.append("WHERE id IN ");
 		sql.append("(SELECT small.id FROM category big INNER JOIN category middle ON big.id = middle.parent_id ");
-		sql.append("INNER JOIN category small ON middle.id = small.parent_id WHERE big.id = :id);");
+		sql.append("INNER JOIN category small ON middle.id = small.parent_id ");
+		
+		
+		if (form.getMiddleCategoryId() == null && form.getSmallCategoryId() == null) { //大カテゴリの場合
+			System.out.println("大");
+			sql.append("WHERE big.id = :id);");
+			params.addValue("id", form.getBigCategoryId()).addValue("name", form.getAfterName());
+		} else if (form.getMiddleCategoryId() != null && form.getSmallCategoryId() == null)  { // 中カテゴリの場合
+			System.out.println("中");
+			sql.append("WHERE middle.id = :id);");
+			params.addValue("id", form.getMiddleCategoryId()).addValue("name", form.getAfterName());
+		}
 		
 		sql.append("UPDATE category SET name = :name WHERE id = :id ");
-		params.addValue("id", form.getBigCategoryId()).addValue("name", form.getAfterName());
+		
 		return sql;
 	}
 	
-	
-
-			
 	
 	/**
 	 * 現在のページでの開始番号 - 1 を求める.
