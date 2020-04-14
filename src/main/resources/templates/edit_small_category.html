@@ -129,7 +129,7 @@
 		}
 		
 		//　カテゴリの入力状況によって表示を変える
-		$('#button-form').hide();
+		$('.button-form').hide();
 		$('#editName').hide();
 		$('#label-middle').hide();
 		$('#label-small').hide();
@@ -142,7 +142,7 @@
 			createMiddleCategorySelect();
 			if ($('#bigSelect option:selected').val() == ''){
 				$('#big-choice-message').show();
-				$('#button-form').hide();
+				$('.button-form').hide();
 				$('#editName').hide();
 				$('#middleSelect').hide();
 				$('#label-middle').hide();
@@ -164,7 +164,7 @@
 			if ($('#middleSelect option:selected').val() == ''){
 				$('#middle-choice-message').show();
 				$('#editName').hide();
-				$('#button-form').hide();
+				$('.button-form').hide();
 				$('#smallSelect').hide();
 				$('#small-choice-message').hide();
 				$('#label-small').hide();
@@ -178,11 +178,11 @@
 		
 		$('#smallSelect').on('change',function(){
 			if ($('#smallSelect option:selected').val() == '') {
-				$('#button-form').hide();
+				$('.button-form').hide();
 				$('#editName').hide();
 			} else {
 				$('#small-choice-message').hide();
-				$('#button-form').show();
+				$('.button-form').show();
 				$('#editName').show();
 			}
 		});
@@ -196,6 +196,16 @@
 	      var parentId = $('#middleSelect option:selected').val();
 	      $('#editCategoryForm [name=parentId]').val(parentId); 
 	      $('#editCategoryForm').submit();
+	    });
+	    
+	    // 削除ボタンクリック時の処理
+	    $('#button-delete').on('click',function(){
+	    	if (confirm('削除してもよろしいですか')) {
+	    		var id = $('#smallSelect option:selected').val();
+		    	$('#deleteCategoryForm [name=smallCategoryId]').val(id);
+		    	$('#deleteCategoryForm').submit();
+	    	} else {
+	    	}
 	    });
 	});
 </script>
@@ -273,15 +283,22 @@
         </div>
       </div>
       
-      <div id="button-form" class="form-group">
+      <div class="form-group button-form">
         <div class="col-sm-offset-2 col-sm-10">
           <input type="hidden" name="categoryName">
           <input type="hidden" name="parentId">
-          <button id="button-edit" type="submit" class="btn btn-default">Edit</button>
-          <button id="button-delete" type="submit" class="btn btn-default">Delete</button>
+          <button id="button-edit" type="button" class="btn btn-default">Edit</button>
         </div>
       </div>
     </form>
+    <div class="form-group button-form">
+    	<div class="col-sm-offset-2 col-sm-10">
+    		<form id="deleteCategoryForm" th:action="@{/delete_category}" method="POST" th:object="${deleteCategoryForm}">
+    			<input type="hidden" name="smallCategoryId">
+    			<button id="button-delete" type="button" class="btn btn-default">Delete</button>
+    		</form>
+    	</div>
+    </div>
   </div>
 
 </body>

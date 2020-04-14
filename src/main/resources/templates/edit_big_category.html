@@ -62,15 +62,18 @@
 		}
 		
 		//　カテゴリの入力状況によって表示を変える
-		$('#button-form').hide();
+		$('.button-form').hide();
+		$('#editName').hide();
 		
 		$('#bigSelect').on('change',function(){
 			if ($('#bigSelect option:selected').val() == ''){
 				$('#choice-message').show();
-				$('#button-form').hide();
+				$('.button-form').hide();
+				$('#editName').hide();
 			} else {
 				$('#choice-message').hide();
-				$('#button-form').show();
+				$('.button-form').show();
+				$('#editName').show();
 			}
 		});		
 		
@@ -80,6 +83,16 @@
 	      $('#editCategoryForm [name=beforeName]').val(beforeName);
 	      $('#editCategoryForm [name=categoryName]').val(createCategoryName());
 	      $('#editCategoryForm').submit();
+	    });
+	    
+	    // 削除ボタンクリック時の処理
+	    $('#button-delete').on('click',function(){
+	    	if (confirm('削除してもよろしいですか')) {
+	    		var id = $('#bigSelect option:selected').val();
+		    	$('#deleteCategoryForm [name=bigCategoryId]').val(id);
+		    	$('#deleteCategoryForm').submit();
+	    	} else {
+	    	}
 	    });
 	});
 </script>
@@ -140,14 +153,21 @@
         </div>
       </div>
       
-      <div id="button-form" class="form-group">
+      <div class="form-group button-form">
         <div class="col-sm-offset-2 col-sm-10">
           <input type="hidden" name="categoryName">
-          <button id="button-edit" type="submit" class="btn btn-default">Edit</button>
-          <button id="button-delete" type="submit" class="btn btn-default">Delete</button>
+          <button id="button-edit" type="button" class="btn btn-default">Edit</button>
         </div>
       </div>
     </form>
+    <div class="form-group button-form">
+    	<div class="col-sm-offset-2 col-sm-10">
+    		<form id="deleteCategoryForm" th:action="@{/delete_category}" method="POST" th:object="${deleteCategoryForm}">
+    			<input type="hidden" name="bigCategoryId">
+    			<button id="button-delete" type="button" class="btn btn-default">Delete</button>
+    		</form>
+    	</div>
+    </div>
   </div>
 
 </body>

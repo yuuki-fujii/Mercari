@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
 import com.example.domain.Category;
+import com.example.form.DeleteCategoryForm;
 import com.example.form.EditCategoryForm;
 import com.example.form.SearchCategoryForm;
 
@@ -183,6 +184,27 @@ public class CategoryRepository {
 		}
 		return sql;
 	}
+	
+	
+	public void deleteById(DeleteCategoryForm form) {
+		StringBuilder sql = new StringBuilder();
+		SqlParameterSource param = null;
+		if (form.getSmallCategoryId() != null) { // 小カテゴリの場合
+			sql.append("DELETE FROM category WHERE id=:id");
+			param = new MapSqlParameterSource().addValue("id", form.getSmallCategoryId());
+		} else if (form.getMiddleCategoryId() != null) {
+			sql.append("WITH deleted AS (DELETE FROM category WHERE id = :id RETURNING id) ");
+			sql.append("DELETE FROM category WHERE parent_id = (SELECT id FROM deleted) ");
+			param = new MapSqlParameterSource().addValue("id", form.getMiddleCategoryId());
+		} else if (form.getBigCategoryId() != null) {
+			sql.append("WITH deleted AS (DELETE FROM category WHERE id =:id RETURNING id) ");
+			sql.append("DELETE FROM category WHERE parent_id IN (SELECT id FROM deleted) OR ");
+			sql.append("parent_id IN (SELECT id FROM category WHERE parent_id =:id)");
+			param = new MapSqlParameterSource().addValue("id", form.getBigCategoryId());
+		}
+		template.update(sql.toString(), param);
+	}
+	
 	
 	
 	/**

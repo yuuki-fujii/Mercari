@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.domain.Category;
+import com.example.form.DeleteCategoryForm;
 import com.example.form.EditCategoryForm;
 import com.example.form.SearchCategoryForm;
 import com.example.repository.CategoryRepository;
@@ -83,10 +84,18 @@ public class CategoryService {
 	/**
 	 * カテゴリを更新する.
 	 * 
-	 * @param category カテゴリ
 	 */
 	public void updateCategory(EditCategoryForm form) {
 		categoryRepository.updateCategory(form);
+	}
+	
+	
+	/**
+	 * カテゴリを削除する.
+	 * 
+	 */
+	public void deleteCategory(DeleteCategoryForm form) {
+		categoryRepository.deleteById(form);
 	}
 	
 	
