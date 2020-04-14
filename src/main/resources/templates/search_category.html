@@ -224,9 +224,9 @@
    		<a class="btn btn-default" th:href="@{'/add_category/small?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Add New SmallCategory</a>
     </div>
   	<div class="form-group">
-   		<a class="btn btn-default" th:href="@{/edit_category/big}" ><i class="fa fa-plus-square-o"></i> Edit/Delete BigCategory</a>&nbsp;
-   		<a class="btn btn-default" th:href="@{/edit_category/middle}"><i class="fa fa-plus-square-o"></i> Edit/Delete MiddleCategory</a>&nbsp;
-   		<a class="btn btn-default" ><i class="fa fa-plus-square-o"></i> Edit/Delete SmallCategory</a>
+   		<a class="btn btn-default" th:href="@{'/edit_category/big?pageNumber=' + ${nowPageNumber} }" ><i class="fa fa-plus-square-o"></i> Edit/Delete BigCategory</a>&nbsp;
+   		<a class="btn btn-default" th:href="@{'/edit_category/middle?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Edit/Delete MiddleCategory</a>&nbsp;
+   		<a class="btn btn-default" th:href="@{'/edit_category/small?pageNumber=' + ${nowPageNumber} }"><i class="fa fa-plus-square-o"></i> Edit/Delete SmallCategory</a>
     </div>
     <!-- カテゴリ検索フォーム -->
     <div id="forms">

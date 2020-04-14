@@ -69,20 +69,46 @@
 						middleCategories = bigCategory.childCategories;
 						for (let j = 0; j < middleCategories.length; j++) {
 							let middleCategory = middleCategories[j];
-							let selectedStr = $('#searchForm [name=middleCategoryId]').val() == middleCategory.id ? ' selected' : '';
+							let selectedStr = $('#editCategoryForm [name=middleCategoryId]').val() == middleCategory.id ? ' selected' : '';
 				            middleOptions += '<option value="' + middleCategory.id + '"' + selectedStr + '>' + middleCategory.name + '</option>';
 						}
 						$('#middleSelect').html(middleOptions);
 					}
-				}
+				} 
+				createSmallCategorySelect();
 			} else {
 				// - 大カテゴリ -　が選択された場合　→　中カテゴリ、小カテゴリをリセットする
 				 $('#middleSelect').html('');
 			     $('#middleSelect').val('');
-			     
+			     $('#smallSelect').html('');
+			     $('#smallSelect').val('');
 			}	
 		}
+
 		
+		// 小カテゴリーのプルダウン生成
+		function createSmallCategorySelect() {
+			let selectedMiddleCategoryValue = $('#middleSelect option:selected').val();
+			if (selectedMiddleCategoryValue != '') {
+				for (let i = 0; i < middleCategories.length; i++) {
+					let middleCategory = middleCategories[i];
+					if (middleCategory.id == selectedMiddleCategoryValue) {
+						selectedMiddleCategory = middleCategory;
+						var smallOptions = '<option value="">- 小カテゴリ -</option>';
+						smallCategories = middleCategory.childCategories;
+						for (let j = 0; j < smallCategories.length; j++) {
+							let smallCategory = smallCategories[j];
+							let selectedStr = $('#editCategoryForm [name=smallCategoryId]').val() == smallCategory.id ? ' selected' : '';
+				            smallOptions += '<option value="' + smallCategory.id + '"' + selectedStr + '>' + smallCategory.name + '</option>';
+						}
+						$('#smallSelect').html(smallOptions);
+					}	
+				}	
+			} else {
+				$('#smallSelect').html('');
+			    $('#editCategoryForm [name=smallCategoryId]').val('');
+			}
+		}
 		
 		// カテゴリーのプルダウンの選択文字列を連結
 		function createCategoryName() {
@@ -93,6 +119,10 @@
 				// 中カテゴリが選択されている場合
 				if ($('#middleSelect option:selected').val() != '') {
 					categoryName += '/' + $('#middleSelect option:selected').text();
+					// 小カテゴリが選択されている場合
+					if ($('#smallSelect option:selected').val() != '') {
+						categoryName += '/' + $('#smallSelect option:selected').text();
+					}
 				}
 			}
 			return categoryName;
@@ -102,8 +132,11 @@
 		$('#button-form').hide();
 		$('#editName').hide();
 		$('#label-middle').hide();
+		$('#label-small').hide();
 		$('#middleSelect').hide();
 		$('#middle-choice-message').hide();
+		$('#smallSelect').hide();
+		$('#small-choice-message').hide();
 		
 		$('#bigSelect').on('change',function(){
 			createMiddleCategorySelect();
@@ -113,7 +146,10 @@
 				$('#editName').hide();
 				$('#middleSelect').hide();
 				$('#label-middle').hide();
+				$('#label-small').hide();
 				$('#middle-choice-message').hide();
+				$('#smallSelect').hide();
+				$('#small-choice-message').hide();
 			} else {
 				$('#big-choice-message').hide();
 				$('#middleSelect').show();
@@ -124,12 +160,28 @@
 		
 		// 中カテゴリが変更された時の処理
 		$('#middleSelect').on('change',function(){
+			createSmallCategorySelect();
 			if ($('#middleSelect option:selected').val() == ''){
 				$('#middle-choice-message').show();
 				$('#editName').hide();
 				$('#button-form').hide();
+				$('#smallSelect').hide();
+				$('#small-choice-message').hide();
+				$('#label-small').hide();
 			} else {
 				$('#middle-choice-message').hide();
+				$('#smallSelect').show();
+				$('#small-choice-message').show();
+				$('#label-small').show();
+			}
+		});
+		
+		$('#smallSelect').on('change',function(){
+			if ($('#smallSelect option:selected').val() == '') {
+				$('#button-form').hide();
+				$('#editName').hide();
+			} else {
+				$('#small-choice-message').hide();
 				$('#button-form').show();
 				$('#editName').show();
 			}
@@ -137,10 +189,11 @@
 		
 	    // 検索ボタンクリック時のイベント処理設定
 	    $('#button-edit').on('click', function() {
-	      var beforeName = $('#middleSelect option:selected').text();
+	      var beforeName = $('#smallSelect option:selected').text();
 	      $('#editCategoryForm [name=beforeName]').val(beforeName);
 	      $('#editCategoryForm [name=categoryName]').val(createCategoryName());
-	      var parentId = $('#bigSelect option:selected').val();
+	      $('#editCategoryForm [name=nameAll]').val(createCategoryName());
+	      var parentId = $('#middleSelect option:selected').val();
 	      $('#editCategoryForm [name=parentId]').val(parentId); 
 	      $('#editCategoryForm').submit();
 	    });
@@ -201,12 +254,19 @@
       	     <span id="middle-choice-message" style="color:red">middleCategoryを選択してください</span><br>
      	 </div>
       </div>
-     
+
+      <div class="form-group">
+      	 <label id="label-small" class="col-sm-2 control-label">smallCategory</label>
+      	 <div class="col-sm-8">
+      		 <select id="smallSelect" class="form-control" name="smallCategoryId"></select><input type="hidden" th:field="*{smallCategoryId}"/>
+      	     <span id="small-choice-message" style="color:red">smallCategoryを選択してください</span><br>
+     	 </div>
+      </div>
        
-     
       <div id="editName" class="form-group">
         <label for="inputName" class="col-sm-2 control-label">name</label>
         <div class="col-sm-8">
+          <input type="hidden" name="nameAll">
           <input type="hidden" name="beforeName">
           <input type="text" class="form-control" id="inputName" name="afterName" th:field="*{afterName}"/>
           <span style="color:red" th:errors="*{afterName}">error:may not be empty</span>

@@ -44,28 +44,35 @@ public class EditCategoryController {
 		return "edit_middle_category";
 	}
 	
+	@RequestMapping("/small")
+	public String toEditSmallCategory(Integer pageNumber, Model model) {
+		model.addAttribute("pageNumber", pageNumber);
+		return "edit_small_category";
+	}
+	
+	
 	@RequestMapping("/update")
 	public String update(@Validated EditCategoryForm form, BindingResult result, Model model) {
-		
 		// カテゴリ名が重複している場合弾く
 		List <Category> categoryList = categoryService.judgeExistCategory(form.getAfterName(), form.getParentId(), form.getNameAll());
 		setCategoryIds(form, categoryService.findAllCategories());
+		System.out.println(form);
 		if (categoryList != null) {
 			result.rejectValue("afterName", null, "このカテゴリは既に存在します");
 		}
 		
 		if (result.hasErrors()) {
-			if (form.getMiddleCategoryId() != null) {
+			if (form.getSmallCategoryId() != null) {
+				return toEditSmallCategory(form.getPageNumber(), model);
+			} else if (form.getMiddleCategoryId() != null) {
 				return toEditMiddleCategory(form.getPageNumber(), model);
 			} else {
 				return toEditBigCategory(form.getPageNumber(), model);
 			}
 		}
-		System.out.println(form);
 		categoryService.updateCategory(form);
 		return "redirect:/category/search";
 	}
-	
 	
 	/**
      * 検索完了時、カテゴリーのプルダウンを維持するために

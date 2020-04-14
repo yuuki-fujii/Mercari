@@ -199,24 +199,27 @@ public class CategoryRepository {
 	
 	private StringBuilder createSqlForUpdate(EditCategoryForm form, MapSqlParameterSource params) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE category SET name_all = replace(name_all, '" + form.getBeforeName() + "', :name)");
-		sql.append("WHERE id IN ");
-		sql.append("(SELECT small.id FROM category big INNER JOIN category middle ON big.id = middle.parent_id ");
-		sql.append("INNER JOIN category small ON middle.id = small.parent_id ");
-		
-		
+
 		if (form.getMiddleCategoryId() == null && form.getSmallCategoryId() == null) { //大カテゴリの場合
-			System.out.println("大");
-			sql.append("WHERE big.id = :id);");
+			sql.append("WITH update_id AS ");
+			sql.append("(UPDATE category SET name=:name WHERE id =:id RETURNING id) ");
+			sql.append("UPDATE category SET name_all =");
+			sql.append(":name || '/' ||  SPLIT_PART(name_all,'/',2) || '/' || name ");
+			sql.append("WHERE parent_id IN  (SELECT id FROM category WHERE parent_id IN (SELECT id FROM update_id))");
 			params.addValue("id", form.getBigCategoryId()).addValue("name", form.getAfterName());
-		} else if (form.getMiddleCategoryId() != null && form.getSmallCategoryId() == null)  { // 中カテゴリの場合
-			System.out.println("中");
-			sql.append("WHERE middle.id = :id);");
+		} else if (form.getMiddleCategoryId() != null && form.getSmallCategoryId() == null) { //　小カテゴリの場合
+			sql.append("WITH update_id AS ");
+			sql.append("(UPDATE category SET name=:name WHERE id =:id RETURNING id) ");
+			sql.append("UPDATE category SET name_all =");
+			sql.append("SPLIT_PART(name_all,'/',1) || '/' ||  :name || '/' || name ");
+			sql.append("WHERE parent_id IN (SELECT id FROM update_id)");
 			params.addValue("id", form.getMiddleCategoryId()).addValue("name", form.getAfterName());
+		} else  {
+			sql.append("UPDATE category SET name=:name, name_all =");
+			sql.append("SPLIT_PART(name_all,'/',1) || '/' ||  SPLIT_PART(name_all,'/',2) || '/' || :name ");
+			sql.append("WHERE id=:id");
+			params.addValue("id", form.getSmallCategoryId()).addValue("name", form.getAfterName());
 		}
-		
-		sql.append("UPDATE category SET name = :name WHERE id = :id ");
-		
 		return sql;
 	}
 	
