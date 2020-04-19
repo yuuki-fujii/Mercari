@@ -20,7 +20,7 @@
 <body>
   <!-- navbar -->
   <nav class="navbar navbar-inverse">
-    <a class="navbar-brand" href="./list.html">Rakus Items</a>
+    <a class="navbar-brand" href="./list.html" th:href="@{/item/search}">Rakus Items</a>
   </nav>
 
   <!-- login form -->
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div>
-      <a type="button" class="btn btn-default" href="./register.html"><i class="fa fa-user-plus"></i>&nbsp;Register Account</a>
+      <a type="button" class="btn btn-default" href="./register.html" th:href="@{/register_user}"><i class="fa fa-user-plus"></i>&nbsp;Register Account</a>
     </div>
   </div>
 </body>

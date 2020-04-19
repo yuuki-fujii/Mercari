@@ -20,7 +20,7 @@
 <body>
   <!-- navbar -->
   <nav class="navbar navbar-inverse">
-    <a class="navbar-brand" href="./list.html">Rakus Items</a>
+    <a class="navbar-brand" href="./list.html" th:href="@{/item/search}">Rakus Items</a>
   </nav>
 
   <!-- register form -->
@@ -28,21 +28,25 @@
     <div class="panel panel-default">
       <div class="panel-heading">Register Account</div>
       <div class="panel-body">
-        <form action="#" method="POST">
+        <form action="#" th:action="@{/register_user/insert}" method="POST" th:object="${registerUserForm}">
           <div class="form-group">
             <label for="mail">mail address</label>
-            <input type="email" class="form-control" id="mail">
+            <input type="email" class="form-control" id="mail" name="mailAddress" th:field="*{mailAddress}">
+            <span th:errors="*{mailAddress}" style="color:red"></span>
           </div>
           <div class="form-group">
             <label for="password">password</label>
-            <input type="text" class="form-control" id="password">
+            <span id="passwordMessage" style="color:red"></span>
+            <input type="text" class="form-control" id="password" name="password" th:field="*{password}">
+            <span th:errors="*{password}" style="color:red"></span>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
       </div>
     </div>
     <div>
-      <a type="button" class="btn btn-default" href="./login.html"><i class="fa fa-reply"></i>&nbsp;Login page</a>
+      <a type="button" class="btn btn-default" href="./login.html" th:href="@{/login}"><i class="fa fa-reply"></i>&nbsp;Login page</a>
     </div>
+    <script th:src="@{/js/password_check.js}"></script>
 </body>
 </html>
