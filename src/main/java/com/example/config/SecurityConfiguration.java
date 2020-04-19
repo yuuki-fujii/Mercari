@@ -46,9 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure (HttpSecurity http) throws Exception {
 		
-		http
-			.authorizeRequests()
-				.anyRequest().permitAll(); // 現時点では全てOKにしておく
+		http.authorizeRequests()
+				.antMatchers("/register_user","/register_user/insert","/login**").permitAll()
+				.anyRequest().authenticated();
+				
 		
 		http.formLogin() // ログインに関する設定
 			.loginPage("/login")

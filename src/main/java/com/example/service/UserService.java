@@ -9,7 +9,7 @@ import com.example.repository.UserRepository;
 
 @Service
 @Transactional
-public class RegisterUserService {
+public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -34,4 +34,15 @@ public class RegisterUserService {
 	public User findByEmail(String mailAddress) {
 		return userRepository.findByEmail(mailAddress);
 	}
+	
+	
+	/**
+	 * ユーザ情報を更新する.
+	 * 
+	 * @param user ユーザ情報
+	 */
+	public void update(User user) {
+		userRepository.update(user);
+	}
+	
 }

@@ -44,6 +44,21 @@ public class UserRepository {
 	}
 	
 	/**
+	 * ユーザ情報を更新する.
+	 * 
+	 * @param user ユーザ情報
+	 */
+	public void update(User user) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE users SET mail_address=:mailAddress, password=:password, is_admin=:isAdmin");
+		SqlParameterSource param = new MapSqlParameterSource()
+									.addValue("mailAddress", user.getMailAddress())
+									.addValue("password", user.getPassword())
+									.addValue("isAdmin", user.isAdmin());
+		template.update(sql.toString(), param);
+	}
+	
+	/**
 	 * メールアドレスでユーザ情報を検索・取得する.
 	 * 
 	 * @param email メールアドレス

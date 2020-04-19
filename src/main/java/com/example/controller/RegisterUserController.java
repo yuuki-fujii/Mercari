@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.domain.LoginUser;
 import com.example.domain.User;
 import com.example.form.RegisterUserForm;
-import com.example.service.RegisterUserService;
+import com.example.service.UserService;
 
 @Controller
 @RequestMapping("/register_user")
@@ -29,7 +31,7 @@ public class RegisterUserController {
 	}
 	
 	@Autowired
-	private RegisterUserService registerUserService;
+	private UserService userService;
 	
 	
 	/**
@@ -46,7 +48,7 @@ public class RegisterUserController {
 	@RequestMapping("/insert")
 	public String insert(@Validated RegisterUserForm form, BindingResult result) {
 		
-		if (registerUserService.findByEmail(form.getMailAddress()) != null) {
+		if (userService.findByEmail(form.getMailAddress()) != null) {
 			result.rejectValue("mailAddress", null, "このメールアドレスは既に使われています");
 		}
 		
@@ -62,10 +64,21 @@ public class RegisterUserController {
 		BeanUtils.copyProperties(form, user);
 		// ハッシュ化したパスワードをドメインにコピー
 		user.setPassword(encode);
-		registerUserService.registerUser(user);
+		userService.registerUser(user);
 		return "redirect:/login";
 	}
 	
+	@RequestMapping("/change_status")
+	public String changeStatus(@AuthenticationPrincipal LoginUser loginUser) {
+		User user = loginUser.getUser();
+		if (user.isAdmin()) { 
+			user.setAdmin(false);
+		} else {
+			user.setAdmin(true);
+		}
+		userService.update(user);
+		return "redirect:/logout";
+	}
 	
 	/**
 	 * パスワード形式の確認をする.

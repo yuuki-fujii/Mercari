@@ -24,18 +24,18 @@ public class UserDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String mailAddress) throws UsernameNotFoundException {
 		
-		System.out.println(mailAddress);
 		User user = userRepository.findByEmail(mailAddress);
 		
 		if (user == null) {
-			System.out.println("ログイン失敗");
 			throw new UsernameNotFoundException("not found : " + mailAddress);
 		}
 		
 		// 権限付与
 		Collection<GrantedAuthority> authorityList = new ArrayList<>();
-		authorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
-		
+		authorityList.add(new SimpleGrantedAuthority("ROLE_USER")); // ユーザ権限付与
+		if (user.isAdmin()) {
+			authorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // 管理者権限付与
+		}
 		return new LoginUser(user, authorityList);
 	}
 	

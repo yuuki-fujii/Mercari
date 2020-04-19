@@ -30,6 +30,14 @@
 		    	response(results.slice(0,20));
 		    }
 	  });
+	  
+	  $('#change-status').on("click",function(){
+		  if (window.prompt("パスワードを入力してください") === '1234') {
+			  $('#change-status-form').submit();
+		  } else {
+			  alert("パスワードが違います");
+		  }
+	  });
   });
   </script>
 </head>
@@ -42,29 +50,39 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+      
       <a class="navbar-brand" href="./list.html" th:href="@{/item/search}">Rakus Items</a>
+      <p class="navbar-text navbar-right">
+        user : <span sec:authentication="principal.user.mailAddress">userName</span>&nbsp;&nbsp;&nbsp;
+        status : 
+        <span sec:authorize="hasRole('ROLE_ADMIN')">Admin</span>
+        <span sec:authorize="!hasRole('ROLE_ADMIN')">User</span>&nbsp;&nbsp;&nbsp;
+      </p>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <div>
         <ul class="nav navbar-nav navbar-right">
           <li><a th:href="@{/brand/search}">Brand</a></li>
           <li><a th:href="@{/category/search}">Category</a></li>          
-          <li><a th:href="@{/register_user}">User</a></li>          
           <li><a id="logout" href="./login.html" th:href="@{/logout}">Logout <i class="fa fa-power-off"></i></a></li>
         </ul>
-        <p class="navbar-text navbar-right">
-          user : <span sec:authentication="principal.user.mailAddress">userName</span>
-        </p>
+
       </div>
     </div>
   </nav>
+
+
 
   <div id="main" class="container-fluid">
     <!-- addItem link -->
     <div id="addItemButton">
       <a class="btn btn-default" href="./add.html" th:href="@{'/add_item?pageNumber=' + ${nowPageNumber}}"><i class="fa fa-plus-square-o"></i> Add New Item</a>
     </div>
-
+    
+	<form id="change-status-form" th:action="@{/register_user/change_status}" method="post">
+        	<button id="change-status" type="button">change status</button>
+    </form>
+	
     <!-- 検索フォーム -->
     <div id="forms">
       <form id="searchForm" method="POST" th:action="@{/item/search}" class="form-inline" role="form" th:object="${searchItemForm}" >
