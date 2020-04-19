@@ -7,9 +7,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,10 +31,6 @@ public class RegisterUserController {
 	@Autowired
 	private RegisterUserService registerUserService;
 	
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 	
 	/**
 	 * ユーザ登録画面に遷移する.
@@ -68,9 +62,7 @@ public class RegisterUserController {
 		BeanUtils.copyProperties(form, user);
 		// ハッシュ化したパスワードをドメインにコピー
 		user.setPassword(encode);
-		System.out.println(user);
-		
-//		registerUserService.registerUser(user);
+		registerUserService.registerUser(user);
 		return "redirect:/login";
 	}
 	
