@@ -1,5 +1,7 @@
 package com.example.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -50,11 +52,25 @@ public class UserRepository {
 	 */
 	public void update(User user) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE users SET mail_address=:mailAddress, password=:password, is_admin=:isAdmin");
+		sql.append("UPDATE users SET mail_address=:mailAddress, password=:password, is_admin=:isAdmin WHERE id=:id");
 		SqlParameterSource param = new MapSqlParameterSource()
+									.addValue("id", user.getId())
 									.addValue("mailAddress", user.getMailAddress())
 									.addValue("password", user.getPassword())
-									.addValue("isAdmin", user.isAdmin());
+									.addValue("isAdmin", user.getIsAdmin());
+		template.update(sql.toString(), param);
+	}
+	
+	
+	/**
+	 * ユーザ情報を削除する.
+	 * 
+	 * @param id 主キー
+	 */
+	public void delete(Integer id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("DELETE FROM users WHERE id=:id");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql.toString(), param);
 	}
 	
@@ -74,5 +90,30 @@ public class UserRepository {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * 主キー検索を行う.
+	 * 
+	 * @param id 主キー
+	 * @return 1件のユーザ情報
+	 */
+	public User findById(Integer id) {
+		String sql = "SELECT id, mail_address, password, is_admin FROM users WHERE id=:id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		return template.queryForObject(sql, param, USER_ROW_MAPPER);
+	}
+	
+	
+	/**
+	 * 全ユーザの情報を取得する.
+	 * 
+	 * @return 全ユーザ情報
+	 */
+	public List <User> findAll(){
+		StringBuilder sql = new  StringBuilder();
+		sql.append("SELECT id, mail_address, password, is_admin FROM users ");
+		return template.query(sql.toString(), USER_ROW_MAPPER);
 	}
 }

@@ -71,7 +71,7 @@ public class RegisterUserController {
 	@RequestMapping("/change_status")
 	public String changeStatus(@AuthenticationPrincipal LoginUser loginUser) {
 		User user = loginUser.getUser();
-		if (user.isAdmin()) { 
+		if (user.getIsAdmin()) { 
 			user.setAdmin(false);
 		} else {
 			user.setAdmin(true);

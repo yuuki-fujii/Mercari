@@ -34,12 +34,15 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public boolean isAdmin() {
-		return isAdmin;
-	}
+
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
+	
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", mailAddress=" + mailAddress + ", password=" + password + ", isAdmin=" + isAdmin

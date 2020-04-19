@@ -32,8 +32,11 @@
 	  });
 	  
 	  $('#change-status').on("click",function(){
-		  if (window.prompt("パスワードを入力してください") === '1234') {
+		  var password = window.prompt("パスワードを入力してください");
+		  if (password === '1234') {
 			  $('#change-status-form').submit();
+		  } else if (password == null) {
+			  // キャンセルが押された場合、メッセージを表示しない
 		  } else {
 			  alert("パスワードが違います");
 		  }
@@ -62,6 +65,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <div>
         <ul class="nav navbar-nav navbar-right">
+          <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/user}">User</a></li>
           <li><a th:href="@{/brand/search}">Brand</a></li>
           <li><a th:href="@{/category/search}">Category</a></li>          
           <li><a id="logout" href="./login.html" th:href="@{/logout}">Logout <i class="fa fa-power-off"></i></a></li>
