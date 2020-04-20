@@ -103,7 +103,15 @@
         <div class="form-group">
           <input id="brand"  type="text" class="form-control" placeholder="brand name" name="brandName" th:field="*{brandName}"/>
         </div>
-        <div class="form-group"></div>
+        
+        <div class="form-group">
+        	<select class="form-control" name="isSale">
+        		<option value="">- セール -</option>
+        		<option value="0">通常価格</option>
+        		<option value="1">セール中</option>
+        	</select>
+        </div>
+        
         <input type="hidden" name="categoryName" />
         <button id="button-search" type="button" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       	<!-- ページ番号を指定して表示するフォーム -->
@@ -152,8 +160,17 @@
         </thead>
         <tbody>
           <tr th:each="item : ${itemList}">
-            <td class="item-name"><a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${nowPageNumber}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
-            <td class="item-price" th:text="${item.price}">52.0</td>
+            <td class="item-name">
+            	<span th:if="${item.isSale}" style="color:red">sale !</span>
+            	<a href="./detail.html" th:href="@{'/item_detail?id='+ ${item.id} + '&pageNumber=' + ${nowPageNumber}}" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a>
+            </td>
+            <td class="item-price">
+            	<span th:unless="${item.isSale}" th:text="${item.price}">52.0</span>
+            	<span th:if="${item.isSale}">
+            		<del th:text="${item.price}"></del>&nbsp;
+            		<span th:text="${item.salePrice}" style="color:red"></span>
+            	</span>
+            </td>
             <td class="item-category">
             	<div th:if="${item.categoryNameAll}">
               		<a class="categoryLink" th:data-category="${item.bigCategoryName}" th:text="${item.bigCategoryName}">Electronics</a> /

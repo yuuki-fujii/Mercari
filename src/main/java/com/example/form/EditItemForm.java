@@ -40,6 +40,9 @@ public class EditItemForm {
 	private Integer condition;
 	/** 説明 */
 	private String description;
+	/** セール中かどうか */
+	private Integer isSale;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -118,12 +121,19 @@ public class EditItemForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public Integer getIsSale() {
+		return isSale;
+	}
+	public void setIsSale(Integer isSale) {
+		this.isSale = isSale;
+	}
 	@Override
 	public String toString() {
-		return "EditItemForm [id=" + id + ", pageNumber=" + pageNumber + ", name=" + name + ", price=" + price
-				+ ", bigCategoryId=" + bigCategoryId + ", middleCategoryId=" + middleCategoryId + ", smallCategoryId="
-				+ smallCategoryId + ", categoryName=" + categoryName + ", brandName=" + brandName + ", condition="
-				+ condition + ", description=" + description + "]";
+		return "EditItemForm [id=" + id + ", pageNumber=" + pageNumber + ", name=" + name + ", priceString="
+				+ priceString + ", price=" + price + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
+				+ middleCategoryId + ", smallCategoryId=" + smallCategoryId + ", categoryName=" + categoryName
+				+ ", brandName=" + brandName + ", condition=" + condition + ", description=" + description + ", isSale="
+				+ isSale + "]";
 	}
-	
 }

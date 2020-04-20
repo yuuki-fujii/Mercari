@@ -24,7 +24,8 @@ public class SearchItemForm {
 	private String brandName;
 	/** ページ数 */
 	private Integer pageNumber;
-	
+	/** セール中かどうか */
+	private String isSale;
 	
 	public String getItemName() {
 		return itemName;
@@ -69,10 +70,18 @@ public class SearchItemForm {
 	public void setPageNumber(Integer pageNumber) {
 		this.pageNumber = pageNumber;
 	}
+	
+	public String getIsSale() {
+		return isSale;
+	}
+	public void setIsSale(String isSale) {
+		this.isSale = isSale;
+	}
 	@Override
 	public String toString() {
-		return "SearchForm [itemName=" + itemName + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
+		return "SearchItemForm [itemName=" + itemName + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
 				+ middleCategoryId + ", smallCategoryId=" + smallCategoryId + ", categoryName=" + categoryName
-				+ ", brandName=" + brandName + ", pageNumber=" + pageNumber + "]";
+				+ ", brandName=" + brandName + ", pageNumber=" + pageNumber + ", isSale=" + isSale + "]";
 	}
+	
 }

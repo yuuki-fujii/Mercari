@@ -77,6 +77,11 @@
             <th>description</th>
             <td th:text="${item.description}">I realized his pants are on backwards after the picture. They were very dirty so I hand washed them. He has a stuffed body and painted porcelain head, hands and feet. Back before clowns were too scary. 9"" tall. No chips or cracks but minor paint loss in a few places. Clown Circus Doll Collectible</td>
           </tr>
+          <tr>
+          	<th>sale</th>
+          	<td th:unless="${item.isSale}" th:text="通常価格"></td>
+          	<td th:if="${item.isSale}" th:text="セール中" style="color:red"></td>
+          </tr>
         </tbody>
       </table>
       <a type="button" class="btn btn-default" href="./edit.html" th:href="@{'/edit_item?id=' + ${item.id} +'&pageNumber=' + ${pageNumber}}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>

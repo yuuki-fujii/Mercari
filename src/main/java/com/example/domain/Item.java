@@ -30,6 +30,8 @@ public class Item {
 	private Integer shipping;
 	/** 説明 */
 	private String description;
+	/** セール中かどうか */
+	private boolean isSale;
 	
 	public Integer getId() {
 		return id;
@@ -103,11 +105,25 @@ public class Item {
     public String getSmallCategoryName() {
         return categoryNameAll != null ? categoryNameAll.split("/")[2] : "";
     }
+	public boolean getIsSale() {
+		return isSale;
+	}
+	public void setSale(boolean isSale) {
+		this.isSale = isSale;
+	}
+	
+	// セール中の価格を取得（今回は一律10%割）
+	public double getSalePrice() {
+		return price * 0.9;
+	}
 	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", categoryId=" + categoryId
 				+ ", categoryNameAll=" + categoryNameAll + ", brandId=" + brandId + ", brandName=" + brandName
-				+ ", price=" + price + ", shipping=" + shipping + ", description=" + description + "]";
+				+ ", price=" + price + ", shipping=" + shipping + ", description=" + description + ", isSale=" + isSale
+				+ "]";
 	}
+	
+    
 }

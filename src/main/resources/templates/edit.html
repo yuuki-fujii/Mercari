@@ -142,6 +142,16 @@
             <textarea name="description" id="description" class="form-control" rows="5" th:field="*{description}"></textarea>
           </div>
         </div>
+        <!-- sale -->
+        <div class="form-group">
+        	<label for="isSale" class="col-sm-2 control-label">sale</label>
+        	<div class="col-sm-8">
+        		<select name="isSale">
+        			<option value="0" th:field="*{isSale}">normal price</option>
+        			<option value="1" th:field="*{isSale}">sale price</option>
+        		</select>
+        	</div>
+        </div>
         <!-- submit button -->
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">

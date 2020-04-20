@@ -80,6 +80,9 @@ public class SearchItemListController {
 		model.addAttribute("brandListForAutocomplete", brandService.getBrandListForAutocomplete());
 		// プルダウンを維持するための記述
 		setCategoryIds(form, categoryService.findAllCategories());
+		
+		System.out.println(form);
+		
 		return "list";
 	}
 		

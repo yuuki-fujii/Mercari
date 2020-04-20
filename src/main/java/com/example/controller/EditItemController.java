@@ -53,6 +53,11 @@ public class EditItemController {
 		form.setCondition(item.getCondition());
 		form.setDescription(item.getDescription());
 		setCategoryIds(form, categoryService.findAllCategories());
+		if (item.getIsSale()) {
+			form.setIsSale(1);
+		} else {
+			form.setIsSale(0);
+		}
 		return form;
 	}
 	
@@ -123,8 +128,14 @@ public class EditItemController {
 		}
 		
 		BeanUtils.copyProperties(form, item);
-		// 価格は手動でセットする
+		// 価格とセール中は手動でセットする
 		item.setPrice(form.getPrice());
+		
+		if (form.getIsSale() == 0) {
+			item.setSale(false);
+		} else if (form.getIsSale() == 1) {
+			item.setSale(true);
+		}
 		
 		editItemSerivice.editItem(item);
 		return "redirect:/item/search";
