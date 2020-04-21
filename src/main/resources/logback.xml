@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+	<!-- ログ出力のスタイルを定義 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS}[%thread][%-5level][%logger] %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- ユーザー情報の変更をファイルに出力する -->
+	<appender name="USER_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/user.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/user.%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>100</maxHistory>
+		</rollingPolicy>
+		<encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+	</appender>
+	
+	<!-- Loggerによる個別の制御 -->
+	<logger name="com.example.repository.UserRepository"
+		additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="USER_FILE" />
+	</logger>
+	
+	<!-- Loggerによる制御がない場合の制御 -->
+	<root level="INFO">
+		<!-- コンソールログ -->
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

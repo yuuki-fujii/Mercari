@@ -2,6 +2,8 @@ package com.example.repository;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -24,6 +26,9 @@ public class UserRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
+	// loggerを定義
+	private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
+	
 	/** Userドメインを生成するRowMapper */
 	public static final RowMapper<User> USER_ROW_MAPPER = (rs,i) -> {
 		User user = new User();
@@ -42,6 +47,7 @@ public class UserRepository {
 	public void insert(User user) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		String sql = "INSERT INTO users (mail_address,password) VALUES (:mailAddress,:password)";
+		logger.info("insert :" + user.toString());
 		template.update(sql, param);
 	}
 	
@@ -58,6 +64,7 @@ public class UserRepository {
 									.addValue("mailAddress", user.getMailAddress())
 									.addValue("password", user.getPassword())
 									.addValue("isAdmin", user.getIsAdmin());
+		logger.info("update :" + user.toString());
 		template.update(sql.toString(), param);
 	}
 	

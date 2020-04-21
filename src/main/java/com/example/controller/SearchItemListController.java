@@ -81,8 +81,6 @@ public class SearchItemListController {
 		// プルダウンを維持するための記述
 		setCategoryIds(form, categoryService.findAllCategories());
 		
-		System.out.println(form);
-		
 		return "list";
 	}
 		
