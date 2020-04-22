@@ -32,6 +32,8 @@ public class Item {
 	private String description;
 	/** セール中かどうか */
 	private boolean isSale;
+	/** 画像 */
+	private String image;
 	
 	public Integer getId() {
 		return id;
@@ -111,19 +113,21 @@ public class Item {
 	public void setSale(boolean isSale) {
 		this.isSale = isSale;
 	}
-	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	// セール中の価格を取得（今回は一律10%割）
 	public double getSalePrice() {
 		return price * 0.9;
 	}
-	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", categoryId=" + categoryId
 				+ ", categoryNameAll=" + categoryNameAll + ", brandId=" + brandId + ", brandName=" + brandName
 				+ ", price=" + price + ", shipping=" + shipping + ", description=" + description + ", isSale=" + isSale
-				+ "]";
+				+ ", image=" + image + "]";
 	}
-	
-    
 }

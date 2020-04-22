@@ -67,7 +67,7 @@
     <h2>Edit</h2>
 
     <!-- edit form -->
-    <form id="editItemForm" action="#" th:action="@{/edit_item/update}" method="POST" class="form-horizontal" th:object="${editItemForm}">
+    <form id="editItemForm" action="#" th:action="@{/edit_item/update}" method="POST" class="form-horizontal" th:object="${editItemForm}" enctype="multipart/form-data">
     	<!-- pageNumber -->
     	<input type="hidden" name="pageNumber" th:value="${pageNumber}">
     	<!-- id -->
@@ -79,6 +79,14 @@
             <input type="text" class="form-control" id="inputName" name="name" th:field="*{name}"/>
             <span th:errors="*{name}" style="color:red"></span>
           </div>
+        </div>
+        <!-- image -->
+        <div class="form-group">
+        	<label for="price" class="col-sm-2 control-label">image</label>
+        	<div class="col-sm-8">
+        		<span th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+        		<input type="file" name="image" accept=".jpg,.png,image/jpeg,image/png">
+        	</div>
         </div>
         <!-- price -->
         <div class="form-group">

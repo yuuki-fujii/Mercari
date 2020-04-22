@@ -57,6 +57,12 @@
             <th>name</th>
             <td th:text="${item.name}">Razer BlackWidow Chroma Keyboard</td>
           </tr>
+          <tr th:if="${item.image}">
+            <th>image</th>
+            <td>
+            	<img th:src="${item.image}" height="180px" width="100px">
+            </td>
+          </tr>
           <tr>
             <th>price</th>
             <td th:text="${item.price}">$52.0</td>

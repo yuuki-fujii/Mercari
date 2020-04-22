@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 商品情報を編集するためのフォーム.
  * 
@@ -42,6 +44,8 @@ public class EditItemForm {
 	private String description;
 	/** セール中かどうか */
 	private Integer isSale;
+	/** 画像 */
+	private MultipartFile image;
 	
 	public Integer getId() {
 		return id;
@@ -128,12 +132,18 @@ public class EditItemForm {
 	public void setIsSale(Integer isSale) {
 		this.isSale = isSale;
 	}
+	public MultipartFile getImage() {
+		return image;
+	}
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}
 	@Override
 	public String toString() {
 		return "EditItemForm [id=" + id + ", pageNumber=" + pageNumber + ", name=" + name + ", priceString="
 				+ priceString + ", price=" + price + ", bigCategoryId=" + bigCategoryId + ", middleCategoryId="
 				+ middleCategoryId + ", smallCategoryId=" + smallCategoryId + ", categoryName=" + categoryName
 				+ ", brandName=" + brandName + ", condition=" + condition + ", description=" + description + ", isSale="
-				+ isSale + "]";
+				+ isSale + ", image=" + image + "]";
 	}
 }

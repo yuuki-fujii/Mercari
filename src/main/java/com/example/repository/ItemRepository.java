@@ -41,6 +41,7 @@ public class ItemRepository {
 		item.setShipping(rs.getInt("shipping"));
 		item.setDescription(rs.getString("description"));
 		item.setSale(rs.getBoolean("is_sale"));
+		item.setImage(rs.getString("image"));
 		return item;
 	};
 	
@@ -88,7 +89,7 @@ public class ItemRepository {
 			sql.append("SELECT count(*) ");
 		} else {
 			sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
-			sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description,i.is_sale ");
+			sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description,i.is_sale, i.image ");
 		}
 		
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
@@ -151,7 +152,7 @@ public class ItemRepository {
 	public Item findById(Integer id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
-		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description, i.is_sale ");
+		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description, i.is_sale, i.image ");
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
 		sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("WHERE i.id=:id");
@@ -170,7 +171,7 @@ public class ItemRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE items SET name=:name , condition=:condition, category_id=:categoryId,");
-		sql.append("brand_id=:brandId, price=:price, shipping=:shipping, description=:description, is_sale=:isSale ");
+		sql.append("brand_id=:brandId, price=:price, shipping=:shipping, description=:description, is_sale=:isSale, image=:image ");
 		sql.append("WHERE id=:id");
 		template.update(sql.toString(), param);
 	}
