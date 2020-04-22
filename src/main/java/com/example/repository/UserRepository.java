@@ -118,7 +118,7 @@ public class UserRepository {
 	 * 
 	 * @return 全ユーザ情報
 	 */
-	public List <User> findAll(){
+	public List <User> findForCsv(){
 		StringBuilder sql = new  StringBuilder();
 		sql.append("SELECT id, mail_address, password, is_admin FROM users ");
 		return template.query(sql.toString(), USER_ROW_MAPPER);

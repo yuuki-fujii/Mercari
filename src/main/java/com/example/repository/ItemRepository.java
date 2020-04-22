@@ -45,6 +45,20 @@ public class ItemRepository {
 		return item;
 	};
 	
+	/**
+	 * 全商品の情報を取得する(CSV出力用).
+	 * 
+	 * @return 全商品情報
+	 */
+	public List <Item> findForCsv(){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
+		sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description,i.is_sale, i.image ");
+		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
+    	sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ORDER BY i.price,i.name LIMIT 30 ");
+    	return template.query(sql.toString(), ITEM_ROW_MAPPER);
+	}
+	
 	
 	/**
 	 * 商品を検索する.
@@ -91,7 +105,6 @@ public class ItemRepository {
 			sql.append("SELECT i.id,i.name AS item_name,i.condition,c.id AS category_id,c.name_all AS category_name_all,");
 			sql.append("i.brand_id,b.name AS brand_name,i.price,i.shipping,i.description,i.is_sale, i.image ");
 		}
-		
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
     	sql.append("LEFT OUTER JOIN brand b ON i.brand_id = b.id ");
 		sql.append("WHERE 1 = 1 "); // 下記if文でwhere句を追加しやすいように常に真の条件を入れておく

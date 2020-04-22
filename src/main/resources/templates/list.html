@@ -41,6 +41,11 @@
 			  alert("パスワードが違います");
 		  }
 	  });
+	  
+	  
+	  $('#csv-button').on("click",function(){
+		  window.open('http://localhost:8080/download/csv');
+	  });
   });
   </script>
 </head>
@@ -75,17 +80,20 @@
     </div>
   </nav>
 
-
-
   <div id="main" class="container-fluid">
     <!-- addItem link -->
     <div id="addItemButton">
       <a class="btn btn-default" href="./add.html" th:href="@{'/add_item?pageNumber=' + ${nowPageNumber}}"><i class="fa fa-plus-square-o"></i> Add New Item</a>
+      <br><br>
+      <form id="change-status-form" th:action="@{/register_user/change_status}" method="post">
+        	<button id="change-status" type="button">change status</button>
+      </form>
     </div>
     
-	<form id="change-status-form" th:action="@{/register_user/change_status}" method="post">
-        	<button id="change-status" type="button">change status</button>
-    </form>
+    <form method="GET">
+    	<input type="hidden" name="filename"/>
+    	<button id="csv-button" type="button">CSVファイルダウンロード</button>
+	</form>
 	
     <!-- 検索フォーム -->
     <div id="forms">

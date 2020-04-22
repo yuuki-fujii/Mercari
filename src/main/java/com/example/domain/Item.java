@@ -2,37 +2,51 @@
 
 package com.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * 商品を表すドメインクラス.
  * 
  * @author yuuki
  *
  */
+@JsonPropertyOrder({"主キー","商品名","状態","カテゴリ名","ブランド名","価格","配送","説明","セール中","画像"})
 public class Item {
 	
 	/** 主キー */
+	@JsonProperty("主キー")
 	private Integer id;
 	/** 商品名 */
+	@JsonProperty("商品名")
 	private String name;
 	/** 状態 */
+	@JsonProperty("状態")
 	private Integer condition;
 	/** カテゴリーID */
 	private Integer categoryId;
 	/** 全カテゴリー名 */
+	@JsonProperty("カテゴリ名")
 	private String categoryNameAll;
 	/** ブランドID */
 	private Integer brandId;
 	/** ブランド */
+	@JsonProperty("ブランド名")
 	private String brandName;
 	/** 価格 */
+	@JsonProperty("価格")
 	private double price;
 	/** 配送 */
+	@JsonProperty("配送")
 	private Integer shipping;
 	/** 説明 */
+	@JsonProperty("説明")
 	private String description;
 	/** セール中かどうか */
+	@JsonProperty("セール中")
 	private boolean isSale;
 	/** 画像 */
+	@JsonProperty("画像")
 	private String image;
 	
 	public Integer getId() {

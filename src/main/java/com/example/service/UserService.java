@@ -72,6 +72,6 @@ public class UserService {
 	 * @return 全ユーザ情報
 	 */
 	public List <User> getAllUsers() {
-		return userRepository.findAll();
+		return userRepository.findForCsv();
 	}
 }
