@@ -15,7 +15,8 @@ $(function(){
 	$.getJSON(hostUrl)
 		.done(function(data){
 			bigCategories = data;
-			createBigCategorySelect(bigCategories);
+			console.log(bigCategories);
+			createBigCategorySelect();
 		}).fail(function(){
 			console.log('失敗');
 		}).always(function(){

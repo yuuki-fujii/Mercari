@@ -53,8 +53,10 @@ public class CategoryService {
 				}
 			}
 			session.setAttribute("categoryList", bigCategoryList);
+			System.out.println(bigCategoryList);
 			return bigCategoryList;
 		} 
+		System.out.println(categoryList);
 		return categoryList;
 	}
 	
